@@ -27,6 +27,18 @@ function AppViewModel(){
       }
     })
   }
+
+  self.removeVenues = function(){
+    self.venues.removeAll();
+  }
+
+  self.updateVenues = function(){
+    if(self.venues().length != 0){
+      self.removeVenues();
+    }
+
+    self.addVenues();
+  }
 }
 
 function initialize() {
