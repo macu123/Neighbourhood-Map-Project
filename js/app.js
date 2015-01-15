@@ -17,6 +17,7 @@ function openInfoWindow(myVenue) {
   }
   updateInfoWindow(venues, markers[index]);
   infowindow.open(map, markers[index]);
+  map.setCenter(markers[index].getPosition());
 }
 
 function updateInfoWindow(venues, marker) {
@@ -97,6 +98,7 @@ function AppViewModel() {
         google.maps.event.addListener(marker, 'click', function() {
           updateInfoWindow(venues, this);
           infowindow.open(map, this);
+          map.setCenter(this.getPosition());
         });
         var venue = new Venue(venues[index]);
         self.venues.push(venue);
