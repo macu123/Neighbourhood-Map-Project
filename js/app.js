@@ -1,5 +1,4 @@
 var map;
-var bounds;
 var markers = [];
 var infowindow;
 
@@ -42,9 +41,8 @@ VenueModel.prototype.openInfoWindow = function() {
   map.setCenter(this.latlng);
 };
 
-VenueModel.prototype.updateBounds = function() {
+VenueModel.prototype.extendBounds = function(bounds) {
   bounds.extend(this.latlng);
-  map.fitBounds(bounds);
 };
 
 function VenuesModel() {
@@ -60,9 +58,10 @@ function VenuesModel() {
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
     $.getJSON(urlToRequest, function(data){
       var venues = data.response.groups[0].items;
+      var bounds = new google.maps.LatLngBounds();
       for(var index in venues){
         var venueModel = new VenueModel(venues[index]);
-        venueModel.updateBounds();
+        venueModel.extendBounds(bounds);
         venueModel.addMarker();
         self.venuesModel.push(venueModel);
         google.maps.event.addListener(venueModel.marker, 'click', function() {
@@ -71,6 +70,8 @@ function VenuesModel() {
           map.setCenter(this.myLatlng);
         });
       }
+      map.setCenter(bounds.getCenter());
+      map.fitBounds(bounds);
     })
   };
 
@@ -94,15 +95,15 @@ function initialize() {
   var mapOptions = {
   	center: new google.maps.LatLng(43.2633, -79.9189),
   	zoom: 13,
-  	disableDefaultUI: true
-  }
+    scaleControl: true,
+    mapTypeControl: false
+  };
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-  bounds= new google.maps.LatLngBounds();
   infowindow = new google.maps.InfoWindow({content: ""});
   // Create the search box and link it to the UI element.
   var searchbox = /** @type {HTMLInputElement} */(
       document.getElementById('SearchBox'));
-  var ListDisplay = document.getElementById('popular-places');
+  var ListDisplay = document.getElementById('popular_places');
 
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchbox);
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(ListDisplay);

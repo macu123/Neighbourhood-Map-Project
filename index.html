@@ -5,9 +5,11 @@
 		<meta http-equiv="X-UA-Comatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Neighborhood Map Project</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=drawing"></script>
 		<script type="text/javascript" src="js/jQuery.js"></script>
+		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script type="text/javascript" src="js/knockout.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
@@ -16,12 +18,12 @@
 			<input id="pac-input" type="text" placeholder="Place like cinema, restaurant" >
 			<button id="pac-button" type="submit" data-bind="click: updatevenuesModel">Submit</button>
 		</div>
-		<div id="popular-places">
-			<h1>Popular Places</h1>
-			<div data-bind="foreach: venuesModel">
-				<div data-bind="click: openInfoWindow">
+		<div id="popular_places">
+			<h2 class="text-center" id="list_title" data-toggle="collapse" href="#place_list" aria-expanded="false" aria-controls="place_list">Popular Places</h2>
+			<div id="place_list" class="collapse" data-bind="foreach: venuesModel">
+				<div id="each_place" data-bind="click: openInfoWindow">
 					<hr>
-  					<h2 data-bind="text: name"></h2>
+  					<h3 data-bind="text: name"></h3>
   					<p>Phone Number: <span data-bind="text: contact"></span></p>
   					<p>Address: <span data-bind="text: address"></span></p>
   					<p>Category: <span data-bind="text: category"></span></p>

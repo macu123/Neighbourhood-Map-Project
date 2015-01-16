@@ -16,13 +16,23 @@ html, body, #map-canvas {
 	height: 25px;
 }
 
-#popular-places {
+#popular_places {
 	background-color: white;
+	width: 280px;
 	margin-top: 20px;
 	margin-right: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
-	width: 250px;
-	height: 500px;
+}
+
+#list_title {
+	margin-bottom: 0px;
+}
+
+#place_list {
+	max-height: 400px;
 	overflow: scroll;
+}
+
+#each_place {
+	padding-left: 10px;
+	padding-right: 0px;
 }
