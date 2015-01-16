@@ -3,16 +3,19 @@ var markers = [];
 var infowindow;
 
 VenueModel = function(data) {
-  this.name = data.venue.name;
-  this.contact = data.venue.contact.formattedPhone;
-  this.address = data.venue.location.formattedAddress[0];
-  this.category = data.venue.categories[0].name;
-  this.verified = data.venue.verified;
+  this.name = this.checkData(data.venue.name);
+  this.contact = this.checkData(data.venue.contact.formattedPhone);
+  this.address = this.checkData(data.venue.location.formattedAddress[0]);
+  this.category = this.checkData(data.venue.categories[0].name);
+  this.verified = this.checkData(data.venue.verified);
+  //this.tips = data.tips[0].text;
+  this.rating = this.checkData(data.venue.rating);
   this.icon_prefix = data.venue.categories[0].icon.prefix;
   this.icon_suffix = data.venue.categories[0].icon.suffix;
   this.contentHtml = "<h2>" + this.name + "</h2>" +
   "<p>" + this.contact + "</p>" +
-  "<p>" + this.address + "</p>";
+  "<p>" + this.address + "</p>" +
+  "<p>Rating: " + this.rating + "</p>";
   this.iconUrl = this.icon_prefix + "bg_44" + this.icon_suffix;
   this.latlng = new google.maps.LatLng(
     data.venue.location.lat,
@@ -43,6 +46,16 @@ VenueModel.prototype.openInfoWindow = function() {
 
 VenueModel.prototype.extendBounds = function(bounds) {
   bounds.extend(this.latlng);
+};
+
+VenueModel.prototype.checkData = function(raw_data) {
+  if(typeof(raw_data) === 'undefined' || raw_data === "") {
+    return "N/A";
+  }
+  else {
+    return raw_data;
+  }
+  
 };
 
 function VenuesModel() {
