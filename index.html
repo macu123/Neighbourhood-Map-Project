@@ -14,12 +14,12 @@
 	<body>
 		<div id="SearchBox">
 			<input id="pac-input" type="text" placeholder="Place like cinema, restaurant" >
-			<button id="pac-button" type="submit" data-bind="click: update">Submit</button>
+			<button id="pac-button" type="submit" data-bind="click: updatevenuesModel">Submit</button>
 		</div>
 		<div id="popular-places">
 			<h1>Popular Places</h1>
-			<div data-bind="foreach: venues">
-				<div data-bind="click: window.openInfoWindow">
+			<div data-bind="foreach: venuesModel">
+				<div data-bind="click: openInfoWindow">
 					<hr>
   					<h2 data-bind="text: name"></h2>
   					<p>Phone Number: <span data-bind="text: contact"></span></p>
@@ -32,7 +32,7 @@
 		<div id="map-canvas"></div>
 
 		<script type="text/javascript">
-			ko.applyBindings(new AppViewModel());
+			ko.applyBindings(new VenuesModel());
 		</script>
 	</body>
 </html>

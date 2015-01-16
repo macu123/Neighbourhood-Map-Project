@@ -2,122 +2,90 @@ var map;
 var bounds;
 var markers = [];
 var infowindow;
-var venues;
 
-function ChangeBounds(myLatLng) {
-  bounds.extend(myLatLng);
-  map.fitBounds(bounds);
-}
-
-function openInfoWindow(myVenue) {
-  for(var index in markers) {
-    if(markers[index].getTitle() === myVenue.id){
-      break;
-    }
-  }
-  updateInfoWindow(venues, markers[index]);
-  infowindow.open(map, markers[index]);
-  map.setCenter(markers[index].getPosition());
-}
-
-function updateInfoWindow(venues, marker) {
-  var id = marker.getTitle();
-  for(var index in venues){
-    if(venues[index].venue.id === id){
-      break;
-    }
-  }
-
-  var name = venues[index].venue.name;
-  var contact = venues[index].venue.contact.formattedPhone;
-  var address = venues[index].venue.location.formattedAddress[0];
-  var category = venues[index].venue.categories[0].name;
-  var verified = venues[index].venue.verified;
-  var contentString = "<h2>" + name + "</h2>" + "<p>" + contact + "</p>" +
-                  "<p>" + address + "</p>";
-  infowindow.setContent(contentString);
-}
-
-function createInfoWindow(contentString) {
-  return new google.maps.InfoWindow({content: contentString});
-}
-
-function createLatlng(myVenue) {
-  return new google.maps.LatLng(
-    myVenue.venue.location.lat,
-    myVenue.venue.location.lng
+VenueModel = function(data) {
+  this.name = data.venue.name;
+  this.contact = data.venue.contact.formattedPhone;
+  this.address = data.venue.location.formattedAddress[0];
+  this.category = data.venue.categories[0].name;
+  this.verified = data.venue.verified;
+  this.icon_prefix = data.venue.categories[0].icon.prefix;
+  this.icon_suffix = data.venue.categories[0].icon.suffix;
+  this.contentHtml = "<h2>" + this.name + "</h2>" +
+  "<p>" + this.contact + "</p>" +
+  "<p>" + this.address + "</p>";
+  this.iconUrl = this.icon_prefix + "bg_44" + this.icon_suffix;
+  this.latlng = new google.maps.LatLng(
+    data.venue.location.lat,
+    data.venue.location.lng
     );
-}
-
-function createMarker(myLatlng, id) {
-  return new google.maps.Marker({
-    position: myLatlng,
-    title: id,
-    animation: google.maps.Animation.DROP
+  this.marker = new google.maps.Marker({
+    position: this.latlng,
+    icon: this.iconUrl,
+    animation: google.maps.Animation.DROP,
+    contenthtml: this.contentHtml,
+    myLatlng: this.latlng,
   });
-}
+};
 
-function addMarker(myMarker) {
-  myMarker.setMap(map);
-  markers.push(myMarker);
-}
+VenueModel.prototype.addMarker = function() {
+  this.marker.setMap(map);
+};
 
-function removeMarkers() {
-  while(markers.length > 0) {
-    markers.pop().setMap(null);
-  }
-}
+VenueModel.prototype.removeMarker = function(){
+  this.marker.setMap(null);
+};
 
-function Venue(data) {
-  this.id = data.venue.id;
-  this.name = ko.observable(data.venue.name);
-  this.contact = ko.observable(data.venue.contact.formattedPhone);
-  this.address = ko.observable(data.venue.location.formattedAddress[0]);
-  this.category = ko.observable(data.venue.categories[0].name);
-  this.verified = ko.observable(data.venue.verified);
-}
+VenueModel.prototype.openInfoWindow = function() {
+  infowindow.setContent(this.contentHtml);
+  infowindow.open(map, this.marker);
+  map.setCenter(this.latlng);
+};
 
-function AppViewModel() {
+VenueModel.prototype.updateBounds = function() {
+  bounds.extend(this.latlng);
+  map.fitBounds(bounds);
+};
+
+function VenuesModel() {
   var self = this;
 
-  self.venues = ko.observableArray();
+  self.venuesModel = ko.observableArray();
 
   //request popular venues from FOURSQAURE
-  self.addVenues = function() {
+  self.addvenuesModel = function() {
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&v=20141230&radius=15000&limit=10&";
     var ll = map.getCenter().toUrlValue();
     var query = $("#pac-input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
     $.getJSON(urlToRequest, function(data){
-      venues = data.response.groups[0].items;
+      var venues = data.response.groups[0].items;
       for(var index in venues){
-        var myLatlng = createLatlng(venues[index]);
-        ChangeBounds(myLatlng);
-        var marker = createMarker(myLatlng, venues[index].venue.id);
-        addMarker(marker);
-        google.maps.event.addListener(marker, 'click', function() {
-          updateInfoWindow(venues, this);
+        var venueModel = new VenueModel(venues[index]);
+        venueModel.updateBounds();
+        venueModel.addMarker();
+        self.venuesModel.push(venueModel);
+        google.maps.event.addListener(venueModel.marker, 'click', function() {
+          infowindow.setContent(this.contenthtml);
           infowindow.open(map, this);
-          map.setCenter(this.getPosition());
+          map.setCenter(this.myLatlng);
         });
-        var venue = new Venue(venues[index]);
-        self.venues.push(venue);
-
       }
     })
   };
 
-  self.removeVenues = function() {
-    self.venues.removeAll();
+  self.removevenuesModel = function() {
+    while(self.venuesModel().length > 0){
+      self.venuesModel.pop().removeMarker();
+    }
   };
 
-  self.update = function() {
-    if(self.venues().length != 0) {
-      removeMarkers();
-      self.removeVenues();
+  self.updatevenuesModel = function() {
+    if(self.venuesModel().length > 0) {
+      self.removevenuesModel();
     }
 
-    self.addVenues();
+    self.addvenuesModel();
   };
 
 }
@@ -130,7 +98,7 @@ function initialize() {
   }
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
   bounds= new google.maps.LatLngBounds();
-  infowindow = createInfoWindow("Default");
+  infowindow = new google.maps.InfoWindow({content: ""});
   // Create the search box and link it to the UI element.
   var searchbox = /** @type {HTMLInputElement} */(
       document.getElementById('SearchBox'));
