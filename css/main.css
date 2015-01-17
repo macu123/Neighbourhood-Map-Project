@@ -4,15 +4,13 @@ html, body, #map-canvas {
 	padding: 0;
 }
 
-#pac-button {
-	width: 70px;
-	height: 32px;
+#pac-input {
+	width: 200px;
+	height: 25px;
 }
 
-#pac-input {
-	margin-top: 20px;
-	margin-left: 20px;
-	width: 300px;
+#pac-button {
+	width: 60px;
 	height: 25px;
 }
 
@@ -35,4 +33,16 @@ html, body, #map-canvas {
 #each_place {
 	padding-left: 10px;
 	padding-right: 0px;
+}
+
+#setting {
+	margin-left: 20px;
+	margin-bottom: 10px;
+	border-radius: 45px;
+}
+
+#searchBox {
+	background-color: orange;
+	margin: 10px 0 0 0;
+	padding: 3px 5px;
 }

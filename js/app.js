@@ -1,5 +1,4 @@
 var map;
-var markers = [];
 var infowindow;
 
 VenueModel = function(data) {
@@ -8,25 +7,17 @@ VenueModel = function(data) {
   this.address = this.checkData(data.venue.location.formattedAddress[0]);
   this.category = this.checkData(data.venue.categories[0].name);
   this.verified = this.checkData(data.venue.verified);
-  //this.tips = data.tips[0].text;
   this.rating = this.checkData(data.venue.rating);
   this.icon_prefix = data.venue.categories[0].icon.prefix;
   this.icon_suffix = data.venue.categories[0].icon.suffix;
-  this.contentHtml = "<h2>" + this.name + "</h2>" +
-  "<p>" + this.contact + "</p>" +
-  "<p>" + this.address + "</p>" +
-  "<p>Rating: " + this.rating + "</p>";
-  this.iconUrl = this.icon_prefix + "bg_44" + this.icon_suffix;
-  this.latlng = new google.maps.LatLng(
+
+  this.marker = new google.maps.Marker({
+    position: new google.maps.LatLng(
     data.venue.location.lat,
     data.venue.location.lng
-    );
-  this.marker = new google.maps.Marker({
-    position: this.latlng,
-    icon: this.iconUrl,
-    animation: google.maps.Animation.DROP,
-    contenthtml: this.contentHtml,
-    myLatlng: this.latlng,
+    ),
+    icon: this.icon_prefix + "bg_44" + this.icon_suffix,
+    animation: google.maps.Animation.DROP
   });
 };
 
@@ -39,13 +30,13 @@ VenueModel.prototype.removeMarker = function(){
 };
 
 VenueModel.prototype.openInfoWindow = function() {
-  infowindow.setContent(this.contentHtml);
+  infowindow.setContent(this.marker.contentHtml);
   infowindow.open(map, this.marker);
-  map.setCenter(this.latlng);
+  map.setCenter(this.marker.getPosition());
 };
 
 VenueModel.prototype.extendBounds = function(bounds) {
-  bounds.extend(this.latlng);
+  bounds.extend(this.marker.getPosition());
 };
 
 VenueModel.prototype.checkData = function(raw_data) {
@@ -61,6 +52,7 @@ VenueModel.prototype.checkData = function(raw_data) {
 function VenuesModel() {
   var self = this;
 
+  //self.center = map.getCenter();
   self.venuesModel = ko.observableArray();
 
   //request popular venues from FOURSQAURE
@@ -76,11 +68,15 @@ function VenuesModel() {
         var venueModel = new VenueModel(venues[index]);
         venueModel.extendBounds(bounds);
         venueModel.addMarker();
+        ko.applyBindings(venueModel, $('#infoWindow')[0]);
+        venueModel.marker.contentHtml = $('#infoWindow').html()
+        ko.cleanNode($('#infoWindow')[0]);
         self.venuesModel.push(venueModel);
+        
         google.maps.event.addListener(venueModel.marker, 'click', function() {
-          infowindow.setContent(this.contenthtml);
+          infowindow.setContent(this.contentHtml);
           infowindow.open(map, this);
-          map.setCenter(this.myLatlng);
+          map.setCenter(this.getPosition());
         });
       }
       map.setCenter(bounds.getCenter());
@@ -111,16 +107,23 @@ function initialize() {
     scaleControl: true,
     mapTypeControl: false
   };
-  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  map = new google.maps.Map($('#map-canvas')[0], mapOptions);
   infowindow = new google.maps.InfoWindow({content: ""});
-  // Create the search box and link it to the UI element.
-  var searchbox = /** @type {HTMLInputElement} */(
-      document.getElementById('SearchBox'));
-  var ListDisplay = document.getElementById('popular_places');
+  $('#setting').popover({
+  html: true,
+  title: function() {
+    return $("#popover-head").html();
+  },
+  content: function() {
+    return $("#popover-content").html();
+  }
+});
 
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchbox);
-  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(ListDisplay);
-  
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#searchBox')[0]);
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push($('#popular_places')[0]);
+  map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push($('#setting')[0]);
+
+  ko.applyBindings(new VenuesModel(), $('#VenuesModel')[0]);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
