@@ -118,7 +118,6 @@ function VenuesModel() {
 
 function initialize() {
   var mapOptions = {
-  	center: new google.maps.LatLng(43.2633, -79.9189),
   	zoom: 13,
     disableDefaultUI: true,
     scaleControl: true,
@@ -134,6 +133,23 @@ function initialize() {
   map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#searchBox')[0]);
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push($('#list_button')[0]);
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push($('#place_list')[0]);
+  
+  // Try W3C Geolocation (Preferred)
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var initialLocation = new google.maps.LatLng(
+        position.coords.latitude,
+        position.coords.longitude
+        );
+      map.setCenter(initialLocation);
+    }, function() {
+      map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
+    });
+  }
+  // Browser doesn't support Geolocation
+  else {
+    map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
+  }
   
   ko.applyBindings(new VenuesModel(), $('#VenuesModel')[0]);
 
