@@ -24,7 +24,7 @@ html, body, #map-canvas {
 }
 
 #place_list {
-	background-color: white;
+	background-color: #BDBDBD;
 	width: 300px;
 	margin-top: 10px;
 	margin-right: 5px;
@@ -35,6 +35,10 @@ html, body, #map-canvas {
 #each_place {
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+#each_place:hover {
+	background-color: #9E9E9E;
 }
 
 #setting {
