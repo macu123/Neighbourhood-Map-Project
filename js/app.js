@@ -33,7 +33,9 @@ VenueModel.prototype.openInfoWindow = function() {
   infowindow.setContent(this.marker.contentHtml);
   infowindow.open(map, this.marker);
   map.setCenter(this.marker.getPosition());
-  map.setZoom(13);
+  if(map.getZoom() < 13) {
+    map.setZoom(13);
+  }
 };
 
 VenueModel.prototype.extendBounds = function(bounds) {
@@ -55,8 +57,8 @@ function VenuesModel() {
 
   //ObservableArray to store all VenueModel
   self.venuesModel = ko.observableArray();
-  //Observable for length of observableArray
-  self.len = ko.observable(0);
+  //Observable for number of list unread
+  self.num_unread = ko.observable(0);
   //Observable to store boolean variable for if the list is shown or not
   self.show = ko.observable(true);
 
@@ -82,10 +84,12 @@ function VenuesModel() {
           infowindow.setContent(this.contentHtml);
           infowindow.open(map, this);
           map.setCenter(this.getPosition());
-          map.setZoom(13);
+          if(map.getZoom() < 13) {
+            map.setZoom(13);
+          }
         });
       }
-      self.len(self.venuesModel().length);
+      self.num_unread(self.venuesModel().length);
 
       map.setCenter(bounds.getCenter());
       map.fitBounds(bounds);
@@ -106,8 +110,8 @@ function VenuesModel() {
     self.addvenuesModel();
   };
 
-  self.updateLength = function() {
-    self.len(0);
+  self.updatenum_unread = function() {
+    self.num_unread(0);
   };
 
 }

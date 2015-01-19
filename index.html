@@ -30,8 +30,8 @@
 				<input id="pac-input" type="text" placeholder="Place type like cinema, restaurant" >
 				<button id="pac-button" type="submit">Submit</button>
 			</form>
-			<button id="list_button" class="btn btn-lg btn-info"  data-toggle="collapse" href="#place_list" aria-expanded="false" data-bind="click: updateLength" aria-controls="place_list">
-				Popular Places <span class="badge" data-bind="text: len"></span>
+			<button id="list_button" class="btn btn-lg btn-info"  data-toggle="collapse" href="#place_list" aria-expanded="false" data-bind="click: updatenum_unread" aria-controls="place_list">
+				Popular Places <span class="badge" data-bind="text: num_unread"></span>
 			</button>
 			<div id="place_list" class="collapse" data-bind="foreach: venuesModel">
 				<div id="each_place" data-bind="click: openInfoWindow">
