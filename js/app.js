@@ -69,10 +69,10 @@ function VenuesModel() {
     var query = $("#pac_input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
     $.getJSON(urlToRequest, function(data) {
-      alert(data.meta.code);
-      //self.checkErrorcode(data.meta.code);
       var venues = data.response.groups[0].items;
       var bounds = new google.maps.LatLngBounds();
+      if(self.checkError(venues) === false)
+        return;
       for(var index in venues) {
         var venueModel = new VenueModel(venues[index]);
         venueModel.extendBounds(bounds);
@@ -91,11 +91,12 @@ function VenuesModel() {
           }
         });
       }
-      self.if_shown(true);
       self.num_unread(self.venuesModel().length);
 
       map.setCenter(bounds.getCenter());
       map.fitBounds(bounds);
+    }).error(function() {
+      self.if_shown(false);
     })
   };
 
@@ -117,15 +118,15 @@ function VenuesModel() {
     self.num_unread(0);
   };
 
-  /*self.checkErrorcode = function(errorcode) {
-    switch(errorcode) {
-      case 200:
-          self.if_shown(false);
-          alert("Please try a different search!");
-          break;
-      case 400
+  self.checkError = function(data) {
+    if(data.length < 1) {
+      self.if_shown(false);
+      return false;
+    } else {
+      self.if_shown(true);
+      return true;
     }
-  };*/
+  };
 
 }
 
