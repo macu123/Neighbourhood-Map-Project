@@ -60,15 +60,17 @@ function VenuesModel() {
   //Observable for number of list unread
   self.num_unread = ko.observable(0);
   //Observable to store boolean variable for if the list is shown or not
-  self.show = ko.observable(true);
+  self.if_shown = ko.observable(false);
 
   //request popular venues from FOURSQAURE
   self.addvenuesModel = function() {
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&v=20141230&radius=15000&limit=10&";
     var ll = map.getCenter().toUrlValue();
-    var query = $("#pac-input").val();
+    var query = $("#pac_input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
     $.getJSON(urlToRequest, function(data) {
+      alert(data.meta.code);
+      //self.checkErrorcode(data.meta.code);
       var venues = data.response.groups[0].items;
       var bounds = new google.maps.LatLngBounds();
       for(var index in venues) {
@@ -89,6 +91,7 @@ function VenuesModel() {
           }
         });
       }
+      self.if_shown(true);
       self.num_unread(self.venuesModel().length);
 
       map.setCenter(bounds.getCenter());
@@ -114,6 +117,16 @@ function VenuesModel() {
     self.num_unread(0);
   };
 
+  /*self.checkErrorcode = function(errorcode) {
+    switch(errorcode) {
+      case 200:
+          self.if_shown(false);
+          alert("Please try a different search!");
+          break;
+      case 400
+    }
+  };*/
+
 }
 
 function initialize() {
@@ -127,13 +140,7 @@ function initialize() {
     }
   };
   map = new google.maps.Map($('#map-canvas')[0], mapOptions);
-  infowindow = new google.maps.InfoWindow({content: ""});
 
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#setting')[0]);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#searchBox')[0]);
-  map.controls[google.maps.ControlPosition.TOP_RIGHT].push($('#list_button')[0]);
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push($('#place_list')[0]);
-  
   // Try W3C Geolocation (Preferred)
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -150,6 +157,13 @@ function initialize() {
   else {
     map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
   }
+
+  infowindow = new google.maps.InfoWindow({content: ""});
+
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#setting')[0]);
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#searchBox')[0]);
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push($('#list_button')[0]);
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push($('#popular_places')[0]);
   
   ko.applyBindings(new VenuesModel(), $('#VenuesModel')[0]);
 

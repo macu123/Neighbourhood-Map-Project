@@ -4,41 +4,19 @@ html, body, #map-canvas {
 	padding: 0;
 }
 
-#pac-input {
-	width: 200px;
-	height: 25px;
-}
-
-#pac-button {
-	width: 60px;
-	height: 25px;
-}
-
 #popular_places {
 	margin-top: 5px;
 	margin-right: 5px;
-}
-
-#list_title {
-	margin-right: 0px;
-}
-
-#place_list {
-	background-color: #BDBDBD;
+	padding-left: 4px;
+	padding-right: 4px;
 	width: 300px;
-	margin-top: 10px;
-	margin-right: 5px;
-	max-height: 520px;
+	max-height: 80%;
 	overflow: scroll;
-}
-
-#each_place {
-	margin-left: 10px;
-	margin-right: 10px;
+	background-color: #B3E5FC;
 }
 
 #each_place:hover {
-	background-color: #9E9E9E;
+	background-color: #81D4FA;
 }
 
 #setting {
@@ -48,13 +26,12 @@ html, body, #map-canvas {
 }
 
 #searchBox {
-	background-color: orange;
+	margin-top: 5px;
 	margin-left: 5px;
-	margin-top: 10px;
-	padding: 3px 5px;
+	width: 25%;
 }
 
 #list_button {
 	margin-top: 5px;
-	margin-right: 5px; 
+	margin-right: 5px;
 }
