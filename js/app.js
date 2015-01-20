@@ -159,6 +159,13 @@ function initialize() {
     map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
   }
 
+  //Resize
+  google.maps.event.addDomListener(window, "Resize", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+  });
+
   infowindow = new google.maps.InfoWindow({content: ""});
 
   map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#setting')[0]);
