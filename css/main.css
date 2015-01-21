@@ -34,7 +34,7 @@ body {
 #searchBox {
 	position: fixed;
 	top: 1%;
-	left: 8%;
+	left: 15%;
 	width: 27%;
 	z-index: 1;
 }
