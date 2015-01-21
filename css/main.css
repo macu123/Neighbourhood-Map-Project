@@ -26,22 +26,22 @@ body {
 
 #setting {
 	position: fixed;
-	top: 1%;
+	top: 5px;
 	left: 1%;
 	z-index: 1;
 }
 
 #searchBox {
 	position: fixed;
-	top: 1%;
-	left: 15%;
+	top: 5px;
+	left: 17%;
 	width: 27%;
 	z-index: 1;
 }
 
 #list_button {
 	position: fixed;
-	top: 1%;
+	top: 5px;
 	right: 1%;
 	z-index: 1;
 }
@@ -50,7 +50,7 @@ body {
 	position: fixed;
 	background-color: #B3E5FC;
 	overflow: scroll;
-	top: 13%;
+	top: 60px;
 	right: 1%;
 	max-height: 70%;
 	width: 30%;
@@ -67,7 +67,7 @@ body {
 }
 
 .popover {
-	width: 30%;
+	width: 300px;
 	z-index: 900;
 }
 
