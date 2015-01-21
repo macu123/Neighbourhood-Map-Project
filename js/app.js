@@ -91,7 +91,6 @@ function VenuesModel() {
           }
         });
       }
-      self.num_unread(self.venuesModel().length);
 
       map.setCenter(bounds.getCenter());
       map.fitBounds(bounds);
@@ -120,9 +119,11 @@ function VenuesModel() {
 
   self.checkError = function(data) {
     if(data.length < 1) {
+      self.num_unread(0);
       self.if_shown(false);
       return false;
     } else {
+      self.num_unread(data.length);
       self.if_shown(true);
       return true;
     }
