@@ -68,6 +68,7 @@ body {
 
 .popover {
 	width: 30%;
+	z-index: 900;
 }
 
 #loc_input {
