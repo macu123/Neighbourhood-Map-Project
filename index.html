@@ -20,12 +20,12 @@
 			<p data-bind="text: address"></p>
 			<p>Rating: <span data-bind="text: rating"></span></p>
 		</div>
-
-		<button id="setting" type="button" class="btn btn-primary btn-lg" data-toggle="popover" aria-label="Setting">
-			<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-		</button>
-
-		<div id="VenuesModel">
+		<div id="full-screen">
+				
+			<button id="setting" type="button" class="btn btn-primary btn-lg" data-toggle="popover" aria-label="Setting">
+				<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+			</button>
+					
 			<div id="searchBox" class="input-group input-group-lg">
 				<input id="pac_input" class="form-control" type="text" placeholder="Place type like cinema">
 				<span class="input-group-btn">
@@ -34,14 +34,14 @@
 					</button>
 				</span>
 			</div>
-			
+
 			<button id="list_button" class="btn btn-lg btn-info"  data-toggle="collapse" href="#popular_places" aria-expanded="false" data-bind="click: updatenum_unread" aria-control="popular_places">
 				Popular Places <span class="badge" data-bind="text: num_unread"></span>
 			</button>
-		
+					
 			<div id="popular_places" class="collapse">
 				<div data-bind="if: if_shown">
-					<div id="place_list" data-bind="foreach: venuesModel">
+					<div data-bind="foreach: venuesModel">
 						<div id="each_place" data-bind="click: openInfoWindow">
   							<hr>
   							<h3 data-bind="text: name"></h3>
@@ -53,9 +53,10 @@
 						</div>
 					</div>
 				</div>
-				<h3 id="no_result" data-bind="ifnot: if_shown">There is no result available now</h3>
+				<h3 data-bind="ifnot: if_shown">There is no result available now</h3>
 			</div>
+
+			<div id="map-canvas"></div>
 		</div>
-		<div id="map-canvas"></div>
 	</body>
 </html>

@@ -134,11 +134,7 @@ function initialize() {
   var mapOptions = {
   	zoom: 13,
     disableDefaultUI: true,
-    scaleControl: true,
-    streetViewControl: true,
-    streetViewControlOptions: {
-      position: google.maps.ControlPosition.LEFT_BOTTOM
-    }
+    scaleControl: true
   };
   map = new google.maps.Map($('#map-canvas')[0], mapOptions);
 
@@ -167,17 +163,12 @@ function initialize() {
   });
 
   infowindow = new google.maps.InfoWindow({content: ""});
-
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#setting')[0]);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push($('#searchBox')[0]);
-  map.controls[google.maps.ControlPosition.TOP_RIGHT].push($('#list_button')[0]);
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push($('#popular_places')[0]);
   
-  ko.applyBindings(new VenuesModel(), $('#VenuesModel')[0]);
+  ko.applyBindings(new VenuesModel(), $('#full-screen')[0]);
 
   $('#setting').popover({
     title: "Location Setting",
-    content: "<input id='loc_input' type='text' size='35' placeholder='Location like Toronto'>",
+    content: "<input id='loc_input' type='text' placeholder='Location like Toronto'>",
     html: true,
     placement: "bottom"
   });
