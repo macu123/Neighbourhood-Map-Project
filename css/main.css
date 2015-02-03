@@ -31,13 +31,7 @@ body {
 	z-index: 1;
 }
 
-#searchBox {
-	position: fixed;
-	top: 5px;
-	left: 17%;
-	width: 27%;
-	z-index: 1;
-}
+
 
 #listButton {
 	position: fixed;
@@ -63,6 +57,10 @@ body {
 	background-color: #81D4FA;
 }
 
+#no-chart {
+	margin-top: 40%;
+}
+
 #chart_div {
 	position: fixed;
 	background-color: white;
@@ -75,10 +73,6 @@ body {
 	z-index: 1;
 }
 
-#no-chart {
-	margin-top: 40%;
-}
-
 .popover {
 	width: 300px;
 	z-index: 900;
@@ -88,23 +82,66 @@ body {
 	width: 100%;
 }
 
-@media (min-width: 320px) {
+@media (max-width: 558px) {
+	#chart_div {
+		visibility: hidden;
+	}
+
+	#searchBox {
+		position: fixed;
+		bottom: 5px;
+		left: 5px;
+		width: 300px;
+		z-index: 1;
+	}
+
 	#infoWindowContent {
 		max-width: 150px;
-		max-height: 150px;
+		max-height: 130px;
 	}
 }
 
-@media (min-width: 641px) {
+@media (min-width: 558px) {
+	#infoWindowContent {
+		max-width: 150px;
+		max-height: 130px;
+	}
+
+	#searchBox {
+		position: fixed;
+		top: 5px;
+		left: 65px;
+		width: 300px;
+		z-index: 1;
+	}
+}
+
+@media (min-width: 655px) {
+	#infoWindowContent {
+		max-width: 230px;
+		max-height: 130px;
+	}
+
+	#searchBox {
+		position: fixed;
+		top: 5px;
+		left: 17%;
+		width: 300px;
+		z-index: 1;
+	}
+}
+
+@media (min-width: 1021px) {
 	#infoWindowContent {
 		max-width: 300px;
-		max-height: 300px;
+		max-height: 130px;
 	}
-}
 
-@media (min-width: 1281px) {
-	#infoWindowContent {
-		max-width: 400px;
-		max-height: 400px;
+	#searchBox {
+		position: fixed;
+		top: 5px;
+		left: 17%;
+		width: 300px;
+		z-index: 1;
 	}
 }

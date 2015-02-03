@@ -90,7 +90,12 @@ function VenuesModel() {
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
     //set limit 10 for number of venue models
-    var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&v=20141230&radius=20000&limit=28&";
+    var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?" +
+    "client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&" + 
+    "client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&" +
+    "v=20150130&" + 
+    "radius=20000&" + 
+    "limit=30&";
     //get current map center when request
     var ll = map.getCenter().toUrlValue();
     //get query from input when request
