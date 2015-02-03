@@ -87,3 +87,24 @@ body {
 #loc_input {
 	width: 100%;
 }
+
+@media (min-width: 320px) {
+	#infoWindowContent {
+		max-width: 150px;
+		max-height: 150px;
+	}
+}
+
+@media (min-width: 641px) {
+	#infoWindowContent {
+		max-width: 300px;
+		max-height: 300px;
+	}
+}
+
+@media (min-width: 1281px) {
+	#infoWindowContent {
+		max-width: 400px;
+		max-height: 400px;
+	}
+}

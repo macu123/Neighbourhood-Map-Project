@@ -21,10 +21,12 @@
 	<body>
 
 		<div id="infoWindow" class="hide">
-			<h2 data-bind="text: name"></h2>
-			<p data-bind="text: contact"></p>
-			<p data-bind="text: address"></p>
-			<p>Rating: <span data-bind="text: rating"></span></p>
+			<div id="infoWindowContent">
+				<h2 data-bind="text: name"></h2>
+				<p data-bind="text: contact"></p>
+				<p data-bind="text: address"></p>
+				<p>Rating: <span data-bind="text: rating"></span></p>
+			</div>
 		</div>
 		
 		<div id="full-screen">		
@@ -60,7 +62,7 @@
 						</div>
 					</div>
 				</div>
-				<h3 id="no-result" class="text-center" data-bind="ifnot: if_shown">There is no result available now.</h3>
+				<h3 class="text-center" data-bind="ifnot: if_shown">There is no result available now.</h3>
 			</div>
 		
 			<div id="chart_div">
