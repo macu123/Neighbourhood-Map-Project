@@ -10,4 +10,4 @@ Instruction for Use<br>
 4.User can search interested types of places in the search bar on the top.<br>
 5.Then the application will search up to 30 places based on your request. The left-bottom side will have a pie chart for categories of these result places. The detailed list view in the selected category will show up on the screen when clicking a slice of the pie chart.<br>
 6.These places will also have different types of markers representing them on the map. You can click on the marker to see more info about this place.<br>
-6.There will be a number of unread places displayed on the top right button. When you click the button, it will display the detailed list view. You can also click the list item to see more info about this place on the map.
+7.There will be a number of unread places displayed on the top right button. When you click the button, it will display the detailed list view. You can also click the list item to see more info about this place on the map.
