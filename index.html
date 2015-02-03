@@ -7,13 +7,19 @@
 		<title>Neighborhood Map Project</title>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
-		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=drawing,places"></script>
 		<script type="text/javascript" src="js/jQuery.js"></script>
 		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script type="text/javascript" src="js/knockout.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load('visualization', '1.0', {'packages':['corechart']});
+
+		</script>
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
 	<body>
+
 		<div id="infoWindow" class="hide">
 			<h2 data-bind="text: name"></h2>
 			<p data-bind="text: contact"></p>
@@ -35,14 +41,15 @@
 				</span>
 			</div>
 
-			<button id="list_button" class="btn btn-lg btn-info"  data-toggle="collapse" href="#popular_places" aria-expanded="false" data-bind="click: updatenum_unread" aria-control="popular_places">
+			<button id="listButton" class="btn btn-lg btn-info"  data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-control="collapseOne" data-bind="click: updatenum_unread">
 				Popular Places <span class="badge" data-bind="text: num_unread"></span>
 			</button>
-					
-			<div id="popular_places" class="collapse">
+			
+			<div id="collapseOne" class="collapse">
 				<div data-bind="if: if_shown">
-					<div data-bind="foreach: venuesModel">
-						<div id="each_place" data-bind="click: openInfoWindow">
+					<h3>You are in category: <span data-bind="text: category_filter"></span></h3>
+					<div data-bind="foreach: filtedvenuesModel">
+						<div id="eachPlace" data-bind="click: openInfoWindow">
   							<hr>
   							<h3 data-bind="text: name"></h3>
   							<p>Phone Number: <span data-bind="text: contact"></span></p>
@@ -53,10 +60,16 @@
 						</div>
 					</div>
 				</div>
-				<h3 data-bind="ifnot: if_shown">There is no result available now</h3>
+				<h3 id="no-result" class="text-center" data-bind="ifnot: if_shown">There is no result available now.</h3>
 			</div>
-		</div>
 		
+			<div id="chart_div">
+				<div id="myPieChart" data-bind="visible: if_shown"></div>
+				<h3 id="no-chart" class="text-center" data-bind="ifnot: if_shown">There is no chart available</h3>
+			</div>
+			
+
+		</div>
 		<div id="map-canvas"></div>
 	</body>
 </html>

@@ -1,5 +1,8 @@
 var map;
 var infowindow;
+var chart;
+var chartOption;
+var datatable;
 
 //Model for very venue retrieved from foursquare
 VenueModel = function(data) {
@@ -62,37 +65,56 @@ VenueModel.prototype.checkData = function(raw_data) {
 function VenuesModel() {
   var self = this;
 
-  //ObservableArray to store all VenueModel
-  self.venuesModel = ko.observableArray();
   //Observable for number of models unread
   self.num_unread = ko.observable(0);
   //Observable to store boolean variable for if the list of models is shown or not
   self.if_shown = ko.observable(false);
+  //object to store categories and their numbers
+  self.categories = {};
+  //Observable to store filter keyword
+  self.category_filter = ko.observable("None");
+  //ObservableArray to store all VenueModel
+  self.venuesModel = ko.observableArray();
+  //Computed Observable to store filtered array
+  self.filtedvenuesModel = ko.computed(function() {
+    if(self.category_filter() === "None") {
+      return self.venuesModel();
+    }
+    else {
+      return ko.utils.arrayFilter(self.venuesModel(), function(vm) {
+        return (vm.category === self.category_filter());
+      });
+    }
+  });
 
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
     //set limit 10 for number of venue models
-    var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&v=20141230&radius=15000&limit=10&";
+    var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&v=20141230&radius=20000&limit=28&";
     //get current map center when request
     var ll = map.getCenter().toUrlValue();
     //get query from input when request
     var query = $("#pac_input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
+    
+    self.category_filter("None");
+
     //make ajax call
     $.getJSON(urlToRequest, function(data) {
       var venues = data.response.groups[0].items;
-      var bounds = new google.maps.LatLngBounds();
       if(self.checkError(venues) === false)
         return;
+      var bounds = new google.maps.LatLngBounds();
       for(var index in venues) {
+        self.checkUnique(venues[index]);
         var venueModel = new VenueModel(venues[index]);
         venueModel.extendBounds(bounds);
         venueModel.addMarker();
         //get information window content for every venue model
-        ko.applyBindings(venueModel, $('#infoWindow')[0]);
-        venueModel.marker.contentHtml = $('#infoWindow').html()
+        ko.applyBindings(venueModel, $("#infoWindow")[0]);
+        venueModel.marker.contentHtml = $("#infoWindow").html()
         //remove the binding
-        ko.cleanNode($('#infoWindow')[0]);
+        ko.cleanNode($("#infoWindow")[0]);
         self.venuesModel.push(venueModel);
         //add click event listener for every marker
         google.maps.event.addListener(venueModel.marker, 'click', function() {
@@ -108,6 +130,8 @@ function VenuesModel() {
 
       map.fitBounds(bounds);
       map.setCenter(bounds.getCenter());
+      self.createPieChart();
+      
     //not show the list if the ajax call fails
     }).error(function() {
       self.if_shown(false); 
@@ -149,16 +173,70 @@ function VenuesModel() {
     }
   };
 
+  self.checkUnique = function(data) {
+    var category = data.venue.categories[0].name;
+    
+    if(self.categories.hasOwnProperty(category) === false) {
+      self.categories[category] = 1;
+    }
+    else {
+      self.categories[category] += 1;
+    }
+  };
+
+  self.createPieChart = function() {
+    datatable = new google.visualization.DataTable();
+    //Declare columns
+    datatable.addColumn('string', 'Category');
+    datatable.addColumn('number', 'Total number');
+    
+    $.each(self.categories, function(propertyName, valueOfProperty) {
+      var row = [propertyName, valueOfProperty];
+      datatable.addRow(row);
+    });
+
+    self.categories = {};
+
+    function selectHandler() {
+      var selectedItem = chart.getSelection()[0];
+      if(selectedItem) {
+        var value = datatable.getValue(selectedItem.row, 0);
+        self.category_filter(value);
+        self.num_unread(self.filtedvenuesModel().length);
+        $("#collapseOne").collapse('show');
+      }
+    }
+
+    google.visualization.events.addListener(chart, 'select', selectHandler);
+
+    chart.draw(datatable, chartOption);
+  };
+
 }
 
 //Initialize the map
 function initialize() {
+  chart = new google.visualization.PieChart($("#myPieChart")[0]);
+  chartOption = {
+    title: 'Category Pie Chart',
+    is3D: true,
+    titleTextStyle: {
+      fontSize: 15,
+      bold: true
+    },
+    chartArea: {
+      width: '100%'
+    },
+    legend: {
+      position: 'bottom'
+    }
+  };
   var mapOptions = {
   	zoom: 13,
     disableDefaultUI: true,
     scaleControl: true
   };
-  map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+  map = new google.maps.Map($("#map-canvas")[0], mapOptions);
 
   // Try W3C Geolocation (Preferred)
   //Autodetect user location
@@ -178,26 +256,18 @@ function initialize() {
     map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
   }
 
-  //Resize handler
-  google.maps.event.addDomListener(window, "Resize", function() {
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center);
-  });
-
   infowindow = new google.maps.InfoWindow({content: ""});
-  
-  ko.applyBindings(new VenuesModel(), $('#full-screen')[0]);
+  ko.applyBindings(new VenuesModel(), $("#full-screen")[0]);
   //Bootstrap popover
-  $('#setting').popover({
+  $("#setting").popover({
     title: "Location Setting",
     content: "<input id='loc_input' type='text' placeholder='Location like Toronto'>",
     html: true,
     placement: "bottom"
   });
   //Bootstrap popover event handler
-  $('#setting').on('shown.bs.popover', function() {
-    var loc_input = $('#loc_input')[0];
+  $("#setting").on('shown.bs.popover', function() {
+    var loc_input = $("#loc_input")[0];
     //Google map autocomplete
     var autocompleteOption = {
       types: ['geocode']
@@ -225,6 +295,13 @@ function initialize() {
       }
       
     });
+  });
+
+  //redraw charts when resizing
+  $(window).resize(function() {
+    if(datatable != undefined) {
+      chart.draw(datatable, chartOption);
+    }
   });
 
 }
