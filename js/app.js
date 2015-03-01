@@ -3,6 +3,7 @@ var infowindow;
 var chart;
 var chartOption;
 var datatable;
+var direction = 0;
 
 //Model for very venue retrieved from foursquare
 VenueModel = function(data) {
@@ -139,8 +140,10 @@ function VenuesModel() {
       
     //not show the list if the ajax call fails
     }).error(function() {
-      self.if_shown(false); 
+      self.if_shown(false);
+      alert("Please search again!")
     })
+
   };
 
   //Remove all venue models from the array and remove their markers from the map
@@ -208,7 +211,10 @@ function VenuesModel() {
         var value = datatable.getValue(selectedItem.row, 0);
         self.category_filter(value);
         self.num_unread(self.filtedvenuesModel().length);
-        $("#collapseOne").collapse('show');
+        if(direction === 0) {
+          direction = 1;
+          $("#collapseOne").css("right", "1%");
+        }
       }
     }
 
@@ -219,12 +225,11 @@ function VenuesModel() {
 
 }
 
-//Initialize the map
+//Initialization
 function initialize() {
   chart = new google.visualization.PieChart($("#myPieChart")[0]);
   chartOption = {
     title: 'Category Pie Chart',
-    is3D: true,
     titleTextStyle: {
       fontSize: 15,
       bold: true
@@ -302,12 +307,25 @@ function initialize() {
     });
   });
 
+  $("#listButton").click(function() {
+    var r = $("#collapseOne").css("right");
+    if(direction === 0) {
+      direction = 1;
+      $("#collapseOne").css("right", "1%");
+    }
+    else {
+      direction = 0;
+      $("#collapseOne").css("right", "-30%");
+    }
+  });
+
   //redraw charts when resizing
   $(window).resize(function() {
     if(datatable != undefined) {
       chart.draw(datatable, chartOption);
     }
   });
+
 
 }
 

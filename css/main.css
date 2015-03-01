@@ -45,12 +45,15 @@ body {
 	background-color: #B3E5FC;
 	overflow: scroll;
 	top: 60px;
-	right: 1%;
+	right: -30%;
 	width: 30%;
-	max-height: 70%;
+	height: 80%;
 	padding-left: 3%;
 	padding-right: 3%;
 	z-index: 1;
+	－webkit-transition: right 2s;
+	-moz-transition: right 2s;
+	transition: right 2s;
 }
 
 #eachPlace:hover {
