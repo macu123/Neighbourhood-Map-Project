@@ -30,19 +30,19 @@
 		</div>
 		
 		<div id="full-screen">		
-			<button id="setting" type="button" class="btn btn-primary btn-lg" data-toggle="popover" aria-label="Setting">
+			<button id="setting" class="btn btn-primary btn-lg" data-toggle="popover" aria-label="Setting">
 				<span class="glyphicon glyphicon-cog" aria-hidden="true">
 				</span>
 			</button>
 					
-			<div id="searchBox" class="input-group input-group-lg">
+			<form id="searchBox" class="input-group input-group-lg" data-bind="submit: updatevenuesModel">
 				<input id="pac_input" class="form-control" type="text" placeholder="Place type like cinema">
 				<span class="input-group-btn">
-					<button id="myButton" type="button" class="btn btn-primary" data-bind="click: updatevenuesModel">
+					<button id="myButton" class="btn btn-primary">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 				</span>
-			</div>
+			</form>
 
 			<button id="listButton" class="btn btn-lg btn-info" data-bind="click: updatenum_unread">
 				Places 
@@ -87,8 +87,8 @@
 					Please try to search a different term!
 				</h3>
 				<h3 id="ajax_failed" class="text-center" data-bind="visible: display_state() === 0">
-					There is unexpected error happening.<br>
-					Please try to search it later!
+					Cannot reach to the server!<br>
+					Please try it later!
 				</h3>
 			</div>
 		

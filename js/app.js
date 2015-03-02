@@ -120,8 +120,12 @@ function VenuesModel() {
     $.getJSON(urlToRequest, function(data) {
       self.ajax_failed(false);
       var venues = data.response.groups[0].items;
-      if(self.checkError(venues) === false)
+      if(self.checkError(venues) === false) {
+        alert(
+          "There is no result available now.\nPlease try to search a different term!"
+          );
         return;
+      }
       var bounds = new google.maps.LatLngBounds();
       for(var index in venues) {
         self.checkUnique(venues[index]);
@@ -155,7 +159,7 @@ function VenuesModel() {
       self.ajax_failed(true);
       self.updatenum_unread();
       alert(
-        "There is unexpected error happening.\nPlease try to search it later!"
+        "Cannot reach to the  server!\nPlease try it later!"
         );
     });
 
@@ -337,14 +341,16 @@ function initialize() {
 
   var venuesModel = new VenuesModel();
   ko.applyBindings(venuesModel, $("#full-screen")[0]);
-  if(map === undefined) {
-    alert("Google map cannot be fully loaded!\nPlease try it later!");
-  }
-  else {
-    venuesModel.updatevenuesModel();
-  }
+  venuesModel.updatevenuesModel();
 
 }
 
 //Do initializa function each time when window is load
-google.maps.event.addDomListener(window, 'load', initialize);
+if(typeof google === 'object' && typeof google.maps === 'object') {
+  google.maps.event.addDomListener(window, 'load', initialize);
+}
+else {
+  alert(
+    "The google map cannot be fully loaded!\nPlease try it later!"
+    );
+}
