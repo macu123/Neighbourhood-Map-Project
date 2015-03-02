@@ -66,6 +66,8 @@ VenueModel.prototype.checkData = function(raw_data) {
 function VenuesModel() {
   var self = this;
 
+  //Observable indicating if ajax call fails or not
+  self.ajax_failed = ko.observable(false);
   //Observable for number of models unread
   self.num_unread = ko.observable(0);
   //object to store categories and their numbers
@@ -74,8 +76,20 @@ function VenuesModel() {
   self.category_filter = ko.observable("None");
   //ObservableArray to store all VenueModel
   self.venuesModel = ko.observableArray();
+  //Computed Observable to indicate which part to display
+  self.display_state = ko.pureComputed(function() {
+    if(self.ajax_failed() === true) {
+      return 0;
+    }
+    else if(self.venuesModel().length < 1) {
+      return 1;
+    }
+    else {
+      return 2;
+    }
+  });
   //Computed Observable to store filtered array
-  self.filtedvenuesModel = ko.computed(function() {
+  self.filtedvenuesModel = ko.pureComputed(function() {
     if(self.category_filter() === "None") {
       return self.venuesModel();
     }
@@ -104,6 +118,7 @@ function VenuesModel() {
 
     //make ajax call
     $.getJSON(urlToRequest, function(data) {
+      self.ajax_failed(false);
       var venues = data.response.groups[0].items;
       if(self.checkError(venues) === false)
         return;
@@ -137,6 +152,8 @@ function VenuesModel() {
       
     //not show the list if the ajax call fails
     }).error(function() {
+      self.ajax_failed(true);
+      self.updatenum_unread();
       alert(
         "There is unexpected error happening.\nPlease try to search it later!"
         );
@@ -158,7 +175,6 @@ function VenuesModel() {
     }
 
     self.addvenuesModel();
-    //alert("venuesModel length is " + self.venuesModel().length);
   };
 
   //Update the number of venue models unread
@@ -321,7 +337,12 @@ function initialize() {
 
   var venuesModel = new VenuesModel();
   ko.applyBindings(venuesModel, $("#full-screen")[0]);
-  venuesModel.updatevenuesModel();
+  if(map === undefined) {
+    alert("Google map cannot be fully loaded!\nPlease try it later!");
+  }
+  else {
+    venuesModel.updatevenuesModel();
+  }
 
 }
 

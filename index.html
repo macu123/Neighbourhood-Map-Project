@@ -50,7 +50,7 @@
 			</button>
 			
 			<div id="collapseOne">
-				<div data-bind="visible: venuesModel().length >= 1">
+				<div data-bind="visible: display_state() === 2">
 					<h3>
 						You are in category: 
 						<span data-bind="text: category_filter"></span>
@@ -82,15 +82,19 @@
 						</div>
 					</div>
 				</div>
-				<h3 id="no_result" class="text-center" data-bind="visible: venuesModel().length < 1">
+				<h3 id="no_result" class="text-center" data-bind="visible: display_state() === 1">
 					There is no result available now.<br>
 					Please try to search a different term!
+				</h3>
+				<h3 id="ajax_failed" class="text-center" data-bind="visible: display_state() === 0">
+					There is unexpected error happening.<br>
+					Please try to search it later!
 				</h3>
 			</div>
 		
 			<div id="chart_div">
-				<div id="myPieChart" data-bind="visible: venuesModel().length >= 1"></div>
-				<img src="images/small_sad face.jpg" alt="sad face" data-bind="visible: venuesModel().length < 1">
+				<div id="myPieChart" data-bind="visible: display_state() === 2"></div>
+				<img src="images/small_sad face.jpg" alt="sad face" data-bind="visible: display_state() != 2">
 			</div>
 			
 		</div>

@@ -80,7 +80,7 @@ body {
 	width: 100%;
 }
 
-#no_result {
+#ajax_failed {
 	color: red;
 }
 
