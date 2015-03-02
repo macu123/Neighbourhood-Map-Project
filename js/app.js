@@ -307,6 +307,7 @@ function initialize() {
     map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
   }
 
+  var venuesModel = new VenuesModel();
   //Bootstrap popover event handler
   $("#setting").on('shown.bs.popover', function() {
     var loc_input = $("#loc_input")[0];
@@ -323,6 +324,8 @@ function initialize() {
       var place = autocomplete.getPlace();
       //No geometry
       if(!place.geometry) {
+        venuesModel.ajax_failed(true);
+        alert("Cannot locate this place!\nPlease try it later!");
         return;
       }
       //Have geometry
@@ -338,11 +341,8 @@ function initialize() {
       
     });
   });
-
-  var venuesModel = new VenuesModel();
   ko.applyBindings(venuesModel, $("#full-screen")[0]);
   venuesModel.updatevenuesModel();
-
 }
 
 //Do initializa function each time when window is load
