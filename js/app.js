@@ -68,8 +68,6 @@ function VenuesModel() {
 
   //Observable for number of models unread
   self.num_unread = ko.observable(0);
-  //Observable to store boolean variable for if the list of models is shown or not
-  self.if_shown = ko.observable(false);
   //object to store categories and their numbers
   self.categories = {};
   //Observable to store filter keyword
@@ -90,7 +88,7 @@ function VenuesModel() {
 
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
-    //set limit 10 for number of venue models
+    //set limit 30 for number of venue models
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?" +
     "client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&" + 
     "client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&" +
@@ -102,7 +100,6 @@ function VenuesModel() {
     //get query from input when request
     var query = $("#pac_input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
-    
     self.category_filter("None");
 
     //make ajax call
@@ -140,9 +137,10 @@ function VenuesModel() {
       
     //not show the list if the ajax call fails
     }).error(function() {
-      self.if_shown(false);
-      alert("Please search again!")
-    })
+      alert(
+        "There is unexpected error happening.\nPlease try to search it later!"
+        );
+    });
 
   };
 
@@ -160,6 +158,7 @@ function VenuesModel() {
     }
 
     self.addvenuesModel();
+    //alert("venuesModel length is " + self.venuesModel().length);
   };
 
   //Update the number of venue models unread
@@ -171,12 +170,10 @@ function VenuesModel() {
   self.checkError = function(data) {
     if(data.length < 1) {
       self.num_unread(0);
-      self.if_shown(false);
       return false;
     }
     else {
       self.num_unread(data.length);
-      self.if_shown(true);
       return true;
     }
   };
@@ -246,28 +243,8 @@ function initialize() {
     disableDefaultUI: true,
     scaleControl: true
   };
-  map = new google.maps.Map($("#map-canvas")[0], mapOptions);
-
-  // Try W3C Geolocation (Preferred)
-  //Autodetect user location
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var initialLocation = new google.maps.LatLng(
-        position.coords.latitude,
-        position.coords.longitude
-        );
-      map.setCenter(initialLocation);
-    }, function() {
-      map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
-    });
-  }
-  // Browser doesn't support Geolocation
-  else {
-    map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
-  }
-
   infowindow = new google.maps.InfoWindow({content: ""});
-  ko.applyBindings(new VenuesModel(), $("#full-screen")[0]);
+
   //Bootstrap popover
   $("#setting").popover({
     title: "Location Setting",
@@ -275,6 +252,41 @@ function initialize() {
     html: true,
     placement: "bottom"
   });
+  //listButton collapse
+  $("#listButton").click(function() {
+    var r = $("#collapseOne").css("right");
+    if(direction === 0) {
+      direction = 1;
+      $("#collapseOne").css("right", "1%");
+    }
+    else {
+      direction = 0;
+      $("#collapseOne").css("right", "-30%");
+    }
+  });
+  //redraw charts when resizing
+  $(window).resize(function() {
+    if(datatable != undefined) {
+      chart.draw(datatable, chartOption);
+    }
+  });
+
+  map = new google.maps.Map($("#map-canvas")[0], mapOptions);
+
+  // Try W3C Geolocation (Preferred)
+  //Autodetect user location
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var initialLocation = new google.maps.LatLng(
+      position.coords.latitude,
+      position.coords.longitude
+      );
+    map.setCenter(initialLocation);
+  });
+  // Browser doesn't support Geolocation
+  if (map.getCenter() === undefined) {
+    map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
+  }
+
   //Bootstrap popover event handler
   $("#setting").on('shown.bs.popover', function() {
     var loc_input = $("#loc_input")[0];
@@ -307,25 +319,9 @@ function initialize() {
     });
   });
 
-  $("#listButton").click(function() {
-    var r = $("#collapseOne").css("right");
-    if(direction === 0) {
-      direction = 1;
-      $("#collapseOne").css("right", "1%");
-    }
-    else {
-      direction = 0;
-      $("#collapseOne").css("right", "-30%");
-    }
-  });
-
-  //redraw charts when resizing
-  $(window).resize(function() {
-    if(datatable != undefined) {
-      chart.draw(datatable, chartOption);
-    }
-  });
-
+  var venuesModel = new VenuesModel();
+  ko.applyBindings(venuesModel, $("#full-screen")[0]);
+  venuesModel.updatevenuesModel();
 
 }
 

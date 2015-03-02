@@ -48,8 +48,8 @@ body {
 	right: -30%;
 	width: 30%;
 	height: 80%;
-	padding-left: 3%;
-	padding-right: 3%;
+	padding-left: 1%;
+	padding-right: 1%;
 	z-index: 1;
 	－webkit-transition: right 2s;
 	-moz-transition: right 2s;
@@ -60,13 +60,8 @@ body {
 	background-color: #81D4FA;
 }
 
-#no-chart {
-	margin-top: 40%;
-}
-
 #chart_div {
 	position: fixed;
-	background-color: white;
 	left: 1%;
 	bottom: 5px;
 	width: 10%;
@@ -83,6 +78,10 @@ body {
 
 #loc_input {
 	width: 100%;
+}
+
+#no_result {
+	color: red;
 }
 
 @media (max-width: 558px) {
