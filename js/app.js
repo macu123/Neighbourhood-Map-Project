@@ -323,6 +323,7 @@ function initialize() {
       var place = autocomplete.getPlace();
       //No geometry
       if(!place.geometry) {
+        alert("Cannot locate this place!\nPlease try it later!");
         return;
       }
       //Have geometry
