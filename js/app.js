@@ -127,14 +127,14 @@ function VenuesModel() {
         return;
       }
       var bounds = new google.maps.LatLngBounds();
-      for(var index in venues) {
-        self.checkUnique(venues[index]);
-        var venueModel = new VenueModel(venues[index]);
+      for(var i=0, length = venues.length; i < length; i++) {
+        self.checkUnique(venues[i]);
+        var venueModel = new VenueModel(venues[i]);
         venueModel.extendBounds(bounds);
         venueModel.addMarker();
         //get information window content for every venue model
         ko.applyBindings(venueModel, $("#infoWindow")[0]);
-        venueModel.marker.contentHtml = $("#infoWindow").html()
+        venueModel.marker.contentHtml = $("#infoWindow").html();
         //remove the binding
         ko.cleanNode($("#infoWindow")[0]);
         self.venuesModel.push(venueModel);
@@ -286,7 +286,7 @@ function initialize() {
   });
   //redraw charts when resizing
   $(window).resize(function() {
-    if(datatable != undefined) {
+    if(datatable !== undefined) {
       chart.draw(datatable, chartOption);
     }
   });
