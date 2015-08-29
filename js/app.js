@@ -230,7 +230,7 @@ function VenuesModel() {
         self.num_unread(self.filtedvenuesModel().length);
         if(direction === 0) {
           direction = 1;
-          $("#collapseOne").css("right", "1%");
+          $(".collapseOne").css("right", "1%");
         }
       }
     }
@@ -266,22 +266,22 @@ function initialize() {
   infowindow = new google.maps.InfoWindow({content: ""});
 
   //Bootstrap popover
-  $("#setting").popover({
+  $(".setting").popover({
     title: "Location Setting",
-    content: "<input id='loc_input' type='text' placeholder='Location like Toronto'>",
+    content: "<input class='loc_input' type='text' placeholder='Location like Toronto'>",
     html: true,
     placement: "bottom"
   });
   //listButton collapse
-  $("#listButton").click(function() {
-    var r = $("#collapseOne").css("right");
+  $(".listButton").click(function() {
+    var r = $(".collapseOne").css("right");
     if(direction === 0) {
       direction = 1;
-      $("#collapseOne").css("right", "1%");
+      $(".collapseOne").css("right", "1%");
     }
     else {
       direction = 0;
-      $("#collapseOne").css("right", "-30%");
+      $(".collapseOne").css("right", "-30%");
     }
   });
   //redraw charts when resizing
@@ -307,8 +307,8 @@ function initialize() {
     map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
   }
   //Bootstrap popover event handler
-  $("#setting").on('shown.bs.popover', function() {
-    var loc_input = $("#loc_input")[0];
+  $(".setting").on('shown.bs.popover', function() {
+    var loc_input = $(".loc_input")[0];
     //Google map autocomplete
     var autocompleteOption = {
       types: ['geocode']
@@ -341,7 +341,7 @@ function initialize() {
 
   var venuesModel = new VenuesModel();
   
-  ko.applyBindings(venuesModel, $("#full-screen")[0]);
+  ko.applyBindings(venuesModel, $(".full-screen")[0]);
   venuesModel.updatevenuesModel();
 }
 
