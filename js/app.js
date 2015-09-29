@@ -26,6 +26,20 @@ VenueModel = function(data) {
   });
 };
 
+//add start animation and stop animation
+VenueModel.prototype.addAnimation = function(marker) {
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  setTimeout(function() {
+    marker.setAnimation(null);
+  }, 3000);
+};
+
+//Do a series of events like animation and open infoWindow after clicking
+VenueModel.prototype.clickEvent = function(marker) {
+  this.addAnimation(marker);
+  this.openInfoWindow(marker);
+};
+
 //Add a marker to the map
 VenueModel.prototype.addMarker = function() {
   this.marker.setMap(map);
@@ -37,13 +51,14 @@ VenueModel.prototype.removeMarker = function() {
 };
 
 //Open infomation window for the venue model
-VenueModel.prototype.openInfoWindow = function() {
-  infowindow.setContent(this.marker.contentHtml);
-  infowindow.open(map, this.marker);
-  map.setCenter(this.marker.getPosition());
+VenueModel.prototype.openInfoWindow = function(marker) {
+  map.setCenter(marker.getPosition());
+  //set zoom level to 13 when the current zoom level is less than 13
   if(map.getZoom() < 13) {
     map.setZoom(13);
   }
+  infowindow.setContent(marker.contentHtml);
+  infowindow.open(map, marker);
 };
 
 //Extend bounds for the venue model
@@ -89,7 +104,7 @@ function VenuesModel() {
     }
   });
   //Computed Observable to store filtered array
-  self.filtedvenuesModel = ko.pureComputed(function() {
+  self.filteredvenuesModel = ko.pureComputed(function() {
     if(self.category_filter() === "None") {
       return self.venuesModel();
     }
@@ -99,16 +114,23 @@ function VenuesModel() {
       });
     }
   });
-
+  //Stop all other markers animations
+  self.stopOtherAnimations = function(self_marker) {
+    ko.utils.arrayForEach(self.venuesModel(), function(venueModel) {
+      if (venueModel.marker != self_marker) {
+        venueModel.marker.setAnimation(null);
+      }
+    });
+  };
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
-    //set limit 30 for number of venue models
+    //set limit 20 for number of venue models
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?" +
     "client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&" + 
     "client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&" +
     "v=20150130&" + 
     "radius=20000&" + 
-    "limit=30&";
+    "limit=20&";
     //get current map center when request
     var ll = map.getCenter().toUrlValue();
     //get query from input when request
@@ -140,13 +162,8 @@ function VenuesModel() {
         self.venuesModel.push(venueModel);
         //add click event listener for every marker
         google.maps.event.addListener(venueModel.marker, 'click', function() {
-          infowindow.setContent(this.contentHtml);
-          infowindow.open(map, this);
-          map.setCenter(this.getPosition());
-          //set zoom level to 13 when the current zoom level is less than 13
-          if(map.getZoom() < 13) {
-            map.setZoom(13);
-          }
+          venueModel.clickEvent(this);
+          self.stopOtherAnimations(this);
         });
       }
 
@@ -227,7 +244,7 @@ function VenuesModel() {
       if(selectedItem) {
         var value = datatable.getValue(selectedItem.row, 0);
         self.category_filter(value);
-        self.num_unread(self.filtedvenuesModel().length);
+        self.num_unread(self.filteredvenuesModel().length);
         if(direction === 0) {
           direction = 1;
           $(".collapseOne").css("right", "1%");
