@@ -263,6 +263,8 @@ function initialize() {
     disableDefaultUI: true,
     scaleControl: true
   };
+
+  map = new google.maps.Map($("#map-canvas")[0], mapOptions);
   infowindow = new google.maps.InfoWindow({content: ""});
 
   //Bootstrap popover
@@ -272,40 +274,7 @@ function initialize() {
     html: true,
     placement: "bottom"
   });
-  //listButton collapse
-  $(".listButton").click(function() {
-    var r = $(".collapseOne").css("right");
-    if(direction === 0) {
-      direction = 1;
-      $(".collapseOne").css("right", "1%");
-    }
-    else {
-      direction = 0;
-      $(".collapseOne").css("right", "-30%");
-    }
-  });
-  //redraw charts when resizing
-  $(window).resize(function() {
-    if(datatable !== undefined) {
-      chart.draw(datatable, chartOption);
-    }
-  });
 
-  map = new google.maps.Map($("#map-canvas")[0], mapOptions);
-
-  // Try W3C Geolocation (Preferred)
-  //Autodetect user location
-  navigator.geolocation.getCurrentPosition(function(position) {
-    var initialLocation = new google.maps.LatLng(
-      position.coords.latitude,
-      position.coords.longitude
-      );
-    map.setCenter(initialLocation);
-  });
-  // Browser doesn't support Geolocation
-  if (map.getCenter() === undefined) {
-    map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
-  }
   //Bootstrap popover event handler
   $(".setting").on('shown.bs.popover', function() {
     var loc_input = $(".loc_input")[0];
@@ -339,10 +308,41 @@ function initialize() {
     });
   });
 
+  //listButton collapse
+  $(".listButton").click(function() {
+    var r = $(".collapseOne").css("right");
+    if(direction === 0) {
+      direction = 1;
+      $(".collapseOne").css("right", "1%");
+    }
+    else {
+      direction = 0;
+      $(".collapseOne").css("right", "-30%");
+    }
+  });
+
   var venuesModel = new VenuesModel();
-  
   ko.applyBindings(venuesModel, $(".full-screen")[0]);
-  venuesModel.updatevenuesModel();
+  // Try W3C Geolocation (Preferred)
+  //Autodetect user location
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      var initialLocation = new google.maps.LatLng(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      map.setCenter(initialLocation);
+      venuesModel.updatevenuesModel();
+    },
+    function() {
+      // Browser doesn't support Geolocation
+      map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
+      venuesModel.updatevenuesModel();
+    },
+    {timeout:10000}
+  );
+  
 }
 
 //Do initializa function each time when window is load
