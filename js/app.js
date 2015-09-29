@@ -128,8 +128,8 @@ function VenuesModel() {
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?" +
     "client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&" + 
     "client_secret=ZKSE15LDLRYU31YZA2WRL2UYQLDGWFBIPUPTLRH3ITWCEZFL&" +
-    "v=20150130&" + 
-    "radius=20000&" + 
+    "v=20150920&" + 
+    "radius=5000&" + 
     "limit=20&";
     //get current map center when request
     var ll = map.getCenter().toUrlValue();
