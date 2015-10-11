@@ -83,8 +83,10 @@ function VenuesModel() {
 
   //Observable indicating if ajax call fails or not
   self.ajax_failed = ko.observable(false);
-  //Observable for number of models unread
-  self.num_unread = ko.observable(0);
+  //Observable for the length of filteredvenuesModel
+  self.num_of_venueModel = ko.pureComputed(function() {
+    return self.filteredvenuesModel().length;
+  });
   //object to store categories and their numbers
   self.categories = {};
   //Observable to store filter keyword
@@ -195,7 +197,7 @@ function VenuesModel() {
     //not show the list if the ajax call fails
     }).error(function() {
       self.ajax_failed(true);
-      self.updatenum_unread();
+      self.reset_numUnread();
       alert(
         "Cannot reach to the  server!\nPlease try it later!"
         );
@@ -219,21 +221,9 @@ function VenuesModel() {
     self.addvenuesModel();
   };
 
-  //Update the number of venue models unread
-  self.updatenum_unread = function() {
-    self.num_unread(0);
-  };
-
   //Check if there are errors from the response from foursquare
   self.checkError = function(data) {
-    if(data.length < 1) {
-      self.num_unread(0);
-      return false;
-    }
-    else {
-      self.num_unread(data.length);
-      return true;
-    }
+    return data.length >= 1;
   };
 
   self.checkUnique = function(data) {
@@ -259,21 +249,6 @@ function VenuesModel() {
     });
 
     self.categories = {};
-
-    // function selectHandler() {
-    //   var selectedItem = chart.getSelection()[0];
-    //   if(selectedItem) {
-    //     var value = datatable.getValue(selectedItem.row, 0);
-    //     self.category_filter(value);
-    //     self.num_unread(self.filteredvenuesModel().length);
-    //     if(direction === 0) {
-    //       direction = 1;
-    //       $(".collapseOne").css("right", "1%");
-    //     }
-    //   }
-    // }
-
-    // google.visualization.events.addListener(chart, 'select', selectHandler);
 
     chart.draw(datatable, chartOption);
   };
