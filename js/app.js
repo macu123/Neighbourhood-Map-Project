@@ -122,10 +122,18 @@ function VenuesModel() {
 
     self.filteredvenuesModel(filtered_array);
   });
-  //execute show/hide markers whenever the filteredvenuesModel changes
-  // self.filteredvenuesModel.subscribe(function(change) {
-
-  // }, null, 'arrayChange');
+  // execute show/hide markers whenever the filteredvenuesModel changes
+  self.filteredvenuesModel.subscribe(function(change) {
+    var change_length = change.length;
+    for (var i=0; i < change_length; i++) {
+      if (change[i].status === 'deleted') {
+        change[i].value.removeMarker();
+      }
+      else if (change[i].status === 'added') {
+        change[i].value.addMarker();
+      }
+    }
+  }, null, 'arrayChange');
 
   //Stop all other markers animations
   self.stopOtherAnimations = function(self_marker) {
