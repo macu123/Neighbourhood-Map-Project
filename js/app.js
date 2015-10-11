@@ -88,9 +88,11 @@ function VenuesModel() {
   //object to store categories and their numbers
   self.categories = {};
   //Observable to store filter keyword
-  self.category_filter = ko.observable("None");
+  self.keyword_filter = ko.observable("");
   //ObservableArray to store all VenueModel
   self.venuesModel = ko.observableArray();
+  //ObservableArray to store filtered VenuesModel
+  self.filteredvenuesModel = ko.observableArray();
   //Computed Observable to indicate which part to display
   self.display_state = ko.pureComputed(function() {
     if(self.ajax_failed() === true) {
@@ -103,17 +105,28 @@ function VenuesModel() {
       return 2;
     }
   });
-  //Computed Observable to store filtered array
-  self.filteredvenuesModel = ko.pureComputed(function() {
-    if(self.category_filter() === "None") {
-      return self.venuesModel();
+  //execute filter the list view functionality whenever search input field changes
+  self.keyword_filter.subscribe(function(newValue) {
+    var filtered_array;
+    //trim search keyword
+    var keyword_search = newValue.trim();
+    // if search input field is empty
+    if (keyword_search === '') {
+      filtered_array = self.venuesModel();
     }
     else {
-      return ko.utils.arrayFilter(self.venuesModel(), function(vm) {
-        return (vm.category === self.category_filter());
-      });
+      filtered_array = self.venuesModel().filter(function(vm) {
+          return (vm.name.toLowerCase().indexOf(keyword_search.toLowerCase()) !== -1);
+        });
     }
+
+    self.filteredvenuesModel(filtered_array);
   });
+  //execute show/hide markers whenever the filteredvenuesModel changes
+  // self.filteredvenuesModel.subscribe(function(change) {
+
+  // }, null, 'arrayChange');
+
   //Stop all other markers animations
   self.stopOtherAnimations = function(self_marker) {
     ko.utils.arrayForEach(self.venuesModel(), function(venueModel) {
@@ -136,7 +149,6 @@ function VenuesModel() {
     //get query from input when request
     var query = $("#pac_input").val();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
-    self.category_filter("None");
 
     //make ajax call
     $.getJSON(urlToRequest, function(data) {
@@ -169,6 +181,7 @@ function VenuesModel() {
 
       map.fitBounds(bounds);
       map.setCenter(bounds.getCenter());
+      self.filteredvenuesModel(self.venuesModel());
       self.createPieChart();
       
     //not show the list if the ajax call fails
@@ -239,20 +252,20 @@ function VenuesModel() {
 
     self.categories = {};
 
-    function selectHandler() {
-      var selectedItem = chart.getSelection()[0];
-      if(selectedItem) {
-        var value = datatable.getValue(selectedItem.row, 0);
-        self.category_filter(value);
-        self.num_unread(self.filteredvenuesModel().length);
-        if(direction === 0) {
-          direction = 1;
-          $(".collapseOne").css("right", "1%");
-        }
-      }
-    }
+    // function selectHandler() {
+    //   var selectedItem = chart.getSelection()[0];
+    //   if(selectedItem) {
+    //     var value = datatable.getValue(selectedItem.row, 0);
+    //     self.category_filter(value);
+    //     self.num_unread(self.filteredvenuesModel().length);
+    //     if(direction === 0) {
+    //       direction = 1;
+    //       $(".collapseOne").css("right", "1%");
+    //     }
+    //   }
+    // }
 
-    google.visualization.events.addListener(chart, 'select', selectHandler);
+    // google.visualization.events.addListener(chart, 'select', selectHandler);
 
     chart.draw(datatable, chartOption);
   };

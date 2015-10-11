@@ -36,7 +36,7 @@
 			</button>
 					
 			<form class="searchBox input-group input-group-lg" data-bind="submit: updatevenuesModel">
-				<input id="pac_input" class="form-control" type="text" placeholder="Place type like cinema">
+				<input id="pac_input" class="form-control" type="text" placeholder="Place type like cinema" data-bind="textInput: keyword_filter">
 				<span class="input-group-btn">
 					<button id="myButton" class="btn btn-primary">
 						<span class="glyphicon glyphicon-search"></span>
@@ -51,10 +51,6 @@
 			
 			<div class="collapseOne">
 				<div data-bind="visible: display_state() === 2">
-					<h3>
-						You are in category: 
-						<span data-bind="text: category_filter"></span>
-					</h3>
 					<div data-bind="foreach: filteredvenuesModel">
 						<div class="eachPlace" data-bind="click: function() {
             clickEvent($data.marker);
