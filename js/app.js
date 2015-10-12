@@ -2,7 +2,6 @@ var map;
 var infowindow;
 var chart;
 var chartOption;
-var direction = 0;
 
 //Model for very venue retrieved from foursquare
 VenueModel = function(data) {
@@ -208,7 +207,7 @@ function VenuesModel() {
       }
 
       self.filteredvenuesModel(self.venuesModel());
-      // self.createPieChart();
+      self.createPieChart();
       
     //not show the list if the ajax call fails
     }).error(function() {
@@ -223,6 +222,7 @@ function VenuesModel() {
   //Remove all venue models from the array and remove their markers from the map
   self.removevenuesModel = function() {
     self.venuesModel.removeAll();
+    self.filteredvenuesModel.removeAll();
   };
 
   //Update the array of venue models if search button is clicked
@@ -251,40 +251,42 @@ function VenuesModel() {
     }
   };
 
-  // self.createPieChart = function() {
-  //   var datatable = new google.visualization.DataTable();
-  //   //Declare columns
-  //   datatable.addColumn('string', 'Category');
-  //   datatable.addColumn('number', 'Total number');
+  self.createPieChart = function() {
+    var datatable = new google.visualization.DataTable();
+    //Declare columns
+    datatable.addColumn('string', 'Category');
+    datatable.addColumn('number', 'Total number');
     
-  //   $.each(self.categories, function(propertyName, valueOfProperty) {
-  //     var row = [propertyName, valueOfProperty];
-  //     datatable.addRow(row);
-  //   });
+    $.each(self.categories, function(propertyName, valueOfProperty) {
+      var row = [propertyName, valueOfProperty];
+      datatable.addRow(row);
+    });
 
-  //   self.categories = {};
+    self.categories = {};
 
-  //   chart.draw(datatable, chartOption);
-  // };
+    chart.draw(datatable, chartOption);
+  };
 
 }
 
 //Initialization
 function initialize() {
-  // chart = new google.visualization.PieChart($("#myPieChart")[0]);
-  // chartOption = {
-  //   title: 'Category Pie Chart',
-  //   titleTextStyle: {
-  //     fontSize: 15,
-  //     bold: true
-  //   },
-  //   chartArea: {
-  //     width: '100%'
-  //   },
-  //   legend: {
-  //     position: 'bottom'
-  //   }
-  // };
+  chart = new google.visualization.PieChart($("#myPieChart")[0]);
+  chartOption = {
+    chartArea: {
+      left: 0,
+      top: 0,
+      width: '100%',
+      height: '100%'
+    },
+    legend: {
+      position: 'right'
+    },
+    width: 500,
+    height: 500,
+    is3D: true
+  };
+
   var mapOptions = {
   	zoom: 13,
     disableDefaultUI: true,

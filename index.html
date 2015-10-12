@@ -82,12 +82,27 @@
 					Please try it later!
 				</h3>
 			</div>
-		
-			<!-- <div class="chartDiv">
-          <div id="myPieChart" data-bind="visible: display_state() === 2"></div>
-          <img src="images/small_sadface.jpg" alt="sad face" data-bind="visible: display_state() !== 2">
-			</div> -->
-			
+		  <button class="chartButton btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        <span class="glyphicon glyphicon-map-marker"></span>
+      </button>
+
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Category Pie Chart</h4>
+            </div>
+            <div class="modal-body">
+              <div id="myPieChart" data-bind="visible: display_state() === 2"></div>
+              <h3 class="text-center" data-bind="visible: display_state() !== 2">
+                No stats right now.<br>
+                Please try another search!
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
 		</div>
 		<div id="map-canvas"></div>
 

@@ -21,14 +21,21 @@ body {
 .setting {
 	position: fixed;
 	top: 5px;
-	left: 1%;
+	left: 10px;
 	z-index: 1;
 }
 
 .listButton {
 	position: fixed;
 	top: 5px;
-	right: 1%;
+	right: 10px;
+	z-index: 1;
+}
+
+.chartButton {
+	position: fixed;
+	left: 10px;
+	bottom: 10px;
 	z-index: 1;
 }
 
@@ -59,12 +66,6 @@ body {
 .eachPlace:hover {
 	background-color: #81d4fa;
 }
-
-/*.chartDiv {
-	position: fixed;
-	width: 40vw;
-	height: 30vh;
-}*/
 
 .popover {
 	width: 100vw;
@@ -103,22 +104,22 @@ body {
 	height: 25vh;
 }
 
-@media (max-width: 740px) {
+@media (max-width: 650px) {
 	h2 {
 		font-size: 15px;
 	}
 
-	.chartDiv {
+	.chartButton {
 		visibility: hidden;
 	}
 
 	.searchBox {
-		bottom: 5px;
+		bottom: 10px;
 		left: 5px;
 	}
 }
 
-@media (min-width: 740px) {
+@media (min-width: 650px) {
 	.searchBox {
 		top: 5px;
 		left: 20%;
