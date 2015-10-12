@@ -2,7 +2,6 @@ var map;
 var infowindow;
 var chart;
 var chartOption;
-var datatable;
 var direction = 0;
 
 //Model for very venue retrieved from foursquare
@@ -244,7 +243,7 @@ function VenuesModel() {
   };
 
   self.createPieChart = function() {
-    datatable = new google.visualization.DataTable();
+    var datatable = new google.visualization.DataTable();
     //Declare columns
     datatable.addColumn('string', 'Category');
     datatable.addColumn('number', 'Total number');
