@@ -213,7 +213,6 @@ function VenuesModel() {
     //not show the list if the ajax call fails
     }).error(function() {
       self.ajax_failed(true);
-      self.reset_numUnread();
       alert(
         "Cannot reach to the  server!\nPlease try it later!"
         );
@@ -231,7 +230,7 @@ function VenuesModel() {
     if (self.buttonDisable() === true) {
       return;
     }
-    
+
     self.removevenuesModel();
     self.addvenuesModel();
   };
@@ -338,15 +337,7 @@ function initialize() {
 
   //listButton collapse
   $(".listButton").click(function() {
-    var r = $(".collapseOne").css("right");
-    if(direction === 0) {
-      direction = 1;
-      $(".collapseOne").css("right", "1%");
-    }
-    else {
-      direction = 0;
-      $(".collapseOne").css("right", "-30%");
-    }
+    $("#collapseOne").toggleClass("active");
   });
 
   var venuesModel = new VenuesModel();
@@ -361,12 +352,12 @@ function initialize() {
       );
 
       map.setCenter(initialLocation);
-      venuesModel.updatevenuesModel();
+      venuesModel.addvenuesModel();
     },
     function() {
       // Browser doesn't support Geolocation
       map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
-      venuesModel.updatevenuesModel();
+      venuesModel.addvenuesModel();
     },
     {timeout:10000}
   );

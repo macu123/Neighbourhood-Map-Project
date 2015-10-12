@@ -24,26 +24,24 @@
 				<span class="glyphicon glyphicon-cog" aria-hidden="true">
 				</span>
 			</button>
-					
-			<form class="searchBox input-group input-group-lg" role="form" data-bind="submit: updatevenuesModel">
-        <select class="form-control" data-bind="value: boxFunction">
+
+      <form class="searchBox input-group input-group-lg" role="form" data-bind="submit: updatevenuesModel">
+        <select class="functionSelector form-control" data-bind="value: boxFunction">
           <option value="search">Search</option>
           <option value="filter">Filter</option>
         </select>
-				<input class="form-control" type="text" placeholder="Please input keyword here" data-bind="textInput: keyword">
-				<span class="input-group-btn">
-					<button id="myButton" class="btn btn-primary" data-bind="disable: buttonDisable">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
-			</form>
+        <input class="searchField form-control" type="text" placeholder="Please input keyword" data-bind="textInput: keyword">
+        <button id="myButton" class="btn btn-primary btn-lg" data-bind="disable: buttonDisable">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </form>
 
 			<button class="listButton btn btn-lg btn-info">
 				Places 
 				<span class="badge" data-bind="text: num_of_venueModel"></span>
 			</button>
 			
-			<div class="collapseOne">
+			<div id="collapseOne">
 				<div data-bind="visible: display_state() === 2">
 					<div data-bind="foreach: filteredvenuesModel">
 						<div class="eachPlace" data-bind="click: function() {
@@ -96,7 +94,7 @@
     <script src="js/jquery-2.1.3.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/knockout-min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script src="https://www.google.com/jsapi"></script>
     <script>
       google.load('visualization', '1.0', {'packages':['corechart']});
