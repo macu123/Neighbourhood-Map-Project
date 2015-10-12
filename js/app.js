@@ -79,7 +79,12 @@ VenueModel.prototype.checkData = function(raw_data) {
 //Model for all the venues, which is a array of venue models
 function VenuesModel() {
   var self = this;
-
+  //Observable indicating if it's filter or search in terms of functionality
+  self.boxFunction = ko.observable();
+  //Observable indicating if search button is disable or not
+  self.buttonDisable = ko.pureComputed(function() {
+    return self.boxFunction() !== 'search';
+  });
   //Observable indicating if ajax call fails or not
   self.ajax_failed = ko.observable(false);
   //Observable for the length of filteredvenuesModel
@@ -89,7 +94,7 @@ function VenuesModel() {
   //object to store categories and their numbers
   self.categories = {};
   //Observable to store filter keyword
-  self.keyword_filter = ko.observable("");
+  self.keyword = ko.observable("");
   //ObservableArray to store all VenueModel
   self.venuesModel = ko.observableArray();
   //ObservableArray to store filtered VenuesModel
@@ -107,17 +112,21 @@ function VenuesModel() {
     }
   });
   //execute filter the list view functionality whenever search input field changes
-  self.keyword_filter.subscribe(function(newValue) {
+  self.keyword.subscribe(function(newValue) {
+    if (self.boxFunction() !== 'filter') {
+      return;
+    }
+
     var filtered_array;
     //trim search keyword
-    var keyword_search = newValue.trim();
+    var keyword_filter = newValue.trim();
     // if search input field is empty
-    if (keyword_search === '') {
+    if (keyword_filter === '') {
       filtered_array = self.venuesModel();
     }
     else {
       filtered_array = self.venuesModel().filter(function(vm) {
-          return (vm.name.toLowerCase().indexOf(keyword_search.toLowerCase()) !== -1);
+          return (vm.name.toLowerCase().indexOf(keyword_filter.toLowerCase()) !== -1);
         });
     }
 
@@ -167,7 +176,7 @@ function VenuesModel() {
     //get current map center when request
     var ll = map.getCenter().toUrlValue();
     //get query from input when request
-    var query = $("#pac_input").val();
+    var query = self.keyword();
     var urlToRequest = four_square_baseUrl + "ll=" + ll + "&query=" + query;
 
     //make ajax call
@@ -219,10 +228,11 @@ function VenuesModel() {
 
   //Update the array of venue models if search button is clicked
   self.updatevenuesModel = function() {
-    if(self.venuesModel().length > 0) {
-      self.removevenuesModel();
+    if (self.buttonDisable() === true) {
+      return;
     }
-
+    
+    self.removevenuesModel();
     self.addvenuesModel();
   };
 

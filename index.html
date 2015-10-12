@@ -26,9 +26,13 @@
 			</button>
 					
 			<form class="searchBox input-group input-group-lg" role="form" data-bind="submit: updatevenuesModel">
-				<input id="pac_input" class="form-control" type="text" placeholder="keyword for search or filter" data-bind="textInput: keyword_filter">
+        <select class="form-control" data-bind="value: boxFunction">
+          <option value="search">Search</option>
+          <option value="filter">Filter</option>
+        </select>
+				<input class="form-control" type="text" placeholder="Please input keyword here" data-bind="textInput: keyword">
 				<span class="input-group-btn">
-					<button id="myButton" class="btn btn-primary">
+					<button id="myButton" class="btn btn-primary" data-bind="disable: buttonDisable">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 				</span>
