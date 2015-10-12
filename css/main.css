@@ -37,38 +37,34 @@ body {
 	background-color: #b3e5fc;
 	overflow: scroll;
 	top: 60px;
-	right: -55vw;
+	right: -420px;
 	width: 30vw;
 	height: 75vh;
+	max-width: 400px;
 	min-width: 200px;
 	padding-left: 1%;
 	padding-right: 1%;
 	z-index: 1;
-	-webkit-transition: all 3s;
-	-moz-transition: all 3s;
-	transition: all 3s;
+	-webkit-transition: all 2s;
+	-moz-transition: all 2s;
+	transition: all 2s;
 }
 
 #collapseOne.active {
-	-webkit-transform: translateX(-56vw);
-	-moz-transform: translateX(-56vw);
-	transform: translateX(-56vw);
+	-webkit-transform: translateX(-430px);
+	-moz-transform: translateX(-430px);
+	transform: translateX(-430px);
 }
 
 .eachPlace:hover {
 	background-color: #81d4fa;
 }
 
-.chart_div {
+/*.chartDiv {
 	position: fixed;
-	left: 1%;
-	bottom: 5px;
-	width: 10vw;
-	height: 15vh;
-	min-width: 150px;
-	min-height: 200px;
-	z-index: 1;
-}
+	width: 40vw;
+	height: 30vh;
+}*/
 
 .popover {
 	width: 100vw;
@@ -112,7 +108,7 @@ body {
 		font-size: 15px;
 	}
 
-	.chart_div {
+	.chartDiv {
 		visibility: hidden;
 	}
 

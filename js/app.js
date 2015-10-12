@@ -208,7 +208,7 @@ function VenuesModel() {
       }
 
       self.filteredvenuesModel(self.venuesModel());
-      self.createPieChart();
+      // self.createPieChart();
       
     //not show the list if the ajax call fails
     }).error(function() {
@@ -251,40 +251,40 @@ function VenuesModel() {
     }
   };
 
-  self.createPieChart = function() {
-    var datatable = new google.visualization.DataTable();
-    //Declare columns
-    datatable.addColumn('string', 'Category');
-    datatable.addColumn('number', 'Total number');
+  // self.createPieChart = function() {
+  //   var datatable = new google.visualization.DataTable();
+  //   //Declare columns
+  //   datatable.addColumn('string', 'Category');
+  //   datatable.addColumn('number', 'Total number');
     
-    $.each(self.categories, function(propertyName, valueOfProperty) {
-      var row = [propertyName, valueOfProperty];
-      datatable.addRow(row);
-    });
+  //   $.each(self.categories, function(propertyName, valueOfProperty) {
+  //     var row = [propertyName, valueOfProperty];
+  //     datatable.addRow(row);
+  //   });
 
-    self.categories = {};
+  //   self.categories = {};
 
-    chart.draw(datatable, chartOption);
-  };
+  //   chart.draw(datatable, chartOption);
+  // };
 
 }
 
 //Initialization
 function initialize() {
-  chart = new google.visualization.PieChart($("#myPieChart")[0]);
-  chartOption = {
-    title: 'Category Pie Chart',
-    titleTextStyle: {
-      fontSize: 15,
-      bold: true
-    },
-    chartArea: {
-      width: '100%'
-    },
-    legend: {
-      position: 'bottom'
-    }
-  };
+  // chart = new google.visualization.PieChart($("#myPieChart")[0]);
+  // chartOption = {
+  //   title: 'Category Pie Chart',
+  //   titleTextStyle: {
+  //     fontSize: 15,
+  //     bold: true
+  //   },
+  //   chartArea: {
+  //     width: '100%'
+  //   },
+  //   legend: {
+  //     position: 'bottom'
+  //   }
+  // };
   var mapOptions = {
   	zoom: 13,
     disableDefaultUI: true,
