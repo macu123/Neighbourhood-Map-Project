@@ -126,8 +126,7 @@ function VenuesModel() {
   });
   // execute show/hide markers whenever the filteredvenuesModel changes
   self.filteredvenuesModel.subscribe(function(change) {
-    var change_length = change.length;
-    for (var i=0; i < change_length; i++) {
+    for (var i=0, len=change.length; i < len; i++) {
       if (change[i].status === 'deleted') {
         change[i].value.removeMarker();
       }
@@ -135,6 +134,18 @@ function VenuesModel() {
         change[i].value.addMarker();
       }
     }
+    //return if no places in the list view
+    if (self.filteredvenuesModel().length === 0) {
+      return;
+    }
+
+    //adjust the map bounds accordingly
+    var bounds = new google.maps.LatLngBounds();
+    self.filteredvenuesModel().forEach(function(vm) {
+      vm.extendBounds(bounds);
+    });
+    map.fitBounds(bounds);
+
   }, null, 'arrayChange');
 
   //Stop all other markers animations
@@ -170,11 +181,10 @@ function VenuesModel() {
           );
         return;
       }
-      var bounds = new google.maps.LatLngBounds();
+
       for(var i=0, length = venues.length; i < length; i++) {
         self.checkUnique(venues[i]);
         var venueModel = new VenueModel(venues[i]);
-        venueModel.extendBounds(bounds);
         venueModel.addMarker();
         //get information window content for every venue model
         ko.applyBindings(venueModel, $("#infoWindow")[0]);
@@ -189,8 +199,6 @@ function VenuesModel() {
         });
       }
 
-      map.fitBounds(bounds);
-      map.setCenter(bounds.getCenter());
       self.filteredvenuesModel(self.venuesModel());
       self.createPieChart();
       
@@ -207,9 +215,7 @@ function VenuesModel() {
 
   //Remove all venue models from the array and remove their markers from the map
   self.removevenuesModel = function() {
-    while(self.venuesModel().length > 0) {
-      self.venuesModel.pop().removeMarker();
-    }
+    self.venuesModel.removeAll();
   };
 
   //Update the array of venue models if search button is clicked
