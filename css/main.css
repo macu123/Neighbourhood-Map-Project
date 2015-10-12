@@ -96,7 +96,7 @@ body {
 
 .searchBox > .searchField {
 	width: 15vw;
-	min-width: 230px;
+	min-width: 210px;
 }
 
 .infoWindowContent{
@@ -110,12 +110,16 @@ body {
 	}
 
 	.chartButton {
-		visibility: hidden;
+		display: none;
 	}
 
 	.searchBox {
 		bottom: 10px;
 		left: 5px;
+	}
+
+	.myButton {
+		display: none;
 	}
 }
 
