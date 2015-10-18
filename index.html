@@ -25,16 +25,16 @@
 				</span>
 			</button>
 
-      <form class="searchBox input-group input-group-lg" role="form" data-bind="submit: updatevenuesModel">
+    	<form class="searchBox input-group input-group-lg" role="form" data-bind="submit: updatevenuesModel">
         <select class="functionSelector form-control" data-bind="value: boxFunction">
-          <option value="search">Search</option>
-          <option value="filter">Filter</option>
+	          <option value="search">Search</option>
+	          <option value="filter">Filter</option>
         </select>
         <input class="searchField form-control" type="text" placeholder="Please input keyword" data-bind="textInput: keyword">
         <button class="myButton btn btn-primary btn-lg" data-bind="disable: buttonDisable">
-          <span class="glyphicon glyphicon-search"></span>
+	          <span class="glyphicon glyphicon-search"></span>
         </button>
-      </form>
+    	</form>
 
 			<button class="listButton btn btn-lg btn-info">
 				Places 
@@ -44,10 +44,7 @@
 			<div id="collapseOne">
 				<div data-bind="visible: display_state() === 2">
 					<div data-bind="foreach: filteredvenuesModel">
-						<div class="eachPlace" data-bind="click: function() {
-            clickEvent($data.marker);
-            $parent.stopOtherAnimations($data.marker);
-            }">
+						<div class="eachPlace" data-bind="click: function() { clickEvent($data.marker); $parent.stopOtherAnimations($data.marker);}">
   							<hr>
   							<h3 data-bind="text: name"></h3>
   							<p>
