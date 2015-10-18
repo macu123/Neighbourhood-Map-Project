@@ -120,12 +120,12 @@ body {
 
   .myButton {
     display: none;
-  };
+  }
 }
 
 @media (min-width: 650px) {
   .searchBox {
     top: 5px;
     left: 20%;
-  };
+  }
 }
