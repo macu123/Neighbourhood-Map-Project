@@ -352,13 +352,3 @@ function initialize() {
   );
   
 }
-
-//Do initializa function each time when window is load
-if(typeof google === 'object' && typeof google.maps === 'object') {
-  google.maps.event.addDomListener(window, 'load', initialize);
-}
-else {
-  alert(
-    "The google map cannot be fully loaded!\nPlease try it later!"
-    );
-}
