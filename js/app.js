@@ -5,21 +5,19 @@ var chartOption;
 
 //Model for very venue retrieved from foursquare
 VenueModel = function(data) {
-  this.name = this.checkData(data.venue.name);
-  this.contact = this.checkData(data.venue.contact.formattedPhone);
-  this.address = this.checkData(data.venue.location.formattedAddress[0]);
-  this.category = this.checkData(data.venue.categories[0].name);
-  this.verified = this.checkData(data.venue.verified);
-  this.rating = this.checkData(data.venue.rating);
-  this.icon_prefix = data.venue.categories[0].icon.prefix;
-  this.icon_suffix = data.venue.categories[0].icon.suffix;
+  this.name = data.venue.name || "N/A";
+  this.contact = data.venue.contact.formattedPhone || "N/A";
+  this.address = data.venue.location.formattedAddress[0] || "N/A";
+  this.category = data.venue.categories[0].name || "N/A";
+  this.verified = data.venue.verified || "N/A";
+  this.rating = data.venue.rating || "N/A";
   //every venue has a marker associated with it
   this.marker = new google.maps.Marker({
     position: new google.maps.LatLng(
     data.venue.location.lat,
     data.venue.location.lng
     ),
-    icon: this.icon_prefix + "bg_44" + this.icon_suffix,
+    icon: data.venue.categories[0].icon.prefix + "bg_44" + data.venue.categories[0].icon.suffix,
     animation: google.maps.Animation.DROP
   });
 };
@@ -62,17 +60,6 @@ VenueModel.prototype.openInfoWindow = function(marker) {
 //Extend bounds for the venue model
 VenueModel.prototype.extendBounds = function(bounds) {
   bounds.extend(this.marker.getPosition());
-};
-
-//Check there is a valid value for each property of the venue model
-VenueModel.prototype.checkData = function(raw_data) {
-  if(typeof(raw_data) === 'undefined' || raw_data === "") {
-    return "N/A";
-  }
-  else {
-    return raw_data;
-  }
-  
 };
 
 //Model for all the venues, which is a array of venue models
