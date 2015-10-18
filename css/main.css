@@ -1,131 +1,131 @@
 html {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #map-canvas {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .setting {
-	position: fixed;
-	top: 5px;
-	left: 10px;
-	z-index: 1;
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  z-index: 1;
 }
 
 .listButton {
-	position: fixed;
-	top: 5px;
-	right: 10px;
-	z-index: 1;
+  position: fixed;
+  top: 5px;
+  right: 10px;
+  z-index: 1;
 }
 
 .chartButton {
-	position: fixed;
-	left: 10px;
-	bottom: 10px;
-	z-index: 1;
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  z-index: 1;
 }
 
 #collapseOne {
-	position: fixed;
-	background-color: #b3e5fc;
-	overflow: scroll;
-	top: 60px;
-	right: -420px;
-	width: 30vw;
-	height: 75vh;
-	max-width: 400px;
-	min-width: 200px;
-	padding-left: 1%;
-	padding-right: 1%;
-	z-index: 1;
-	-webkit-transition: all 2s;
-	-moz-transition: all 2s;
-	transition: all 2s;
+  position: fixed;
+  background-color: #b3e5fc;
+  overflow: scroll;
+  top: 60px;
+  right: -420px;
+  width: 30vw;
+  height: 75vh;
+  max-width: 400px;
+  min-width: 200px;
+  padding-left: 1%;
+  padding-right: 1%;
+  z-index: 1;
+  -webkit-transition: all 2s;
+  -moz-transition: all 2s;
+  transition: all 2s;
 }
 
 #collapseOne.active {
-	-webkit-transform: translateX(-430px);
-	-moz-transform: translateX(-430px);
-	transform: translateX(-430px);
+  -webkit-transform: translateX(-430px);
+  -moz-transform: translateX(-430px);
+  transform: translateX(-430px);
 }
 
 .eachPlace:hover {
-	background-color: #81d4fa;
+  background-color: #81d4fa;
 }
 
 .popover {
-	width: 100vw;
-	min-width: 185px;
-	z-index: 900;
+  width: 100vw;
+  min-width: 185px;
+  z-index: 900;
 }
 
 .loc_input {
-	width: 100%;
+  width: 100%;
 }
 
 .ajax_failed {
-	color: red;
+  color: red;
 }
 
 .searchBox {
-	position: fixed;
-	z-index: 1;
-	min-width: 390px;
-	padding: 5px;
-	background: orange;
+  position: fixed;
+  z-index: 1;
+  min-width: 390px;
+  padding: 5px;
+  background: orange;
 }
 
 .searchBox > .functionSelector {
-	width: 5vw;
-	min-width: 90px;
+  width: 5vw;
+  min-width: 90px;
 }
 
 .searchBox > .searchField {
-	width: 15vw;
-	min-width: 210px;
+  width: 15vw;
+  min-width: 210px;
 }
 
-.infoWindowContent{
-	width: 45vw;
-	height: 25vh;
+.infoWindowContent {
+  width: 45vw;
+  height: 25vh;
 }
 
 @media (max-width: 650px) {
-	h2 {
-		font-size: 15px;
-	}
+  h2 {
+    font-size: 15px;
+  }
 
-	.chartButton {
-		display: none;
-	}
+  .chartButton {
+    display: none;
+  }
 
-	.searchBox {
-		bottom: 10px;
-		left: 5px;
-	}
+  .searchBox {
+    bottom: 10px;
+    left: 5px;
+  }
 
-	.myButton {
-		display: none;
-	}
+  .myButton {
+    display: none;
+  };
 }
 
 @media (min-width: 650px) {
-	.searchBox {
-		top: 5px;
-		left: 20%;
-	}
+  .searchBox {
+    top: 5px;
+    left: 20%;
+  };
 }
