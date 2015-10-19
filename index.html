@@ -47,7 +47,7 @@
     <div id="collapseOne">
       <div data-bind="visible: display_state() === 2">
         <div data-bind="foreach: filteredvenuesModel">
-          <div class="eachPlace" data-bind="click: function() { clickEvent($data.marker); $parent.stopOtherAnimations($data.marker);}">
+          <div class="eachPlace" data-bind="click: function() {marker.selected(true);}">
             <hr>
             <h3 data-bind="text: name"></h3>
             <p>

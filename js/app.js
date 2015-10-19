@@ -5,35 +5,46 @@ var chartOption;
 
 //Model for very venue retrieved from foursquare
 VenueModel = function(data) {
-  this.name = data.venue.name || "N/A";
-  this.contact = data.venue.contact.formattedPhone || "N/A";
-  this.address = data.venue.location.formattedAddress[0] || "N/A";
-  this.category = data.venue.categories[0].name || "N/A";
-  this.verified = data.venue.verified || "N/A";
-  this.rating = data.venue.rating || "N/A";
+  var self = this;
+  self.name = data.venue.name || "N/A";
+  self.contact = data.venue.contact.formattedPhone || "N/A";
+  self.address = data.venue.location.formattedAddress[0] || "N/A";
+  self.category = data.venue.categories[0].name || "N/A";
+  self.verified = data.venue.verified || "N/A";
+  self.rating = data.venue.rating || "N/A";
   //every venue has a marker associated with it
-  this.marker = new google.maps.Marker({
+  self.marker = new google.maps.Marker({
     position: new google.maps.LatLng(
     data.venue.location.lat,
     data.venue.location.lng
     ),
     icon: data.venue.categories[0].icon.prefix + "bg_44" + data.venue.categories[0].icon.suffix,
-    animation: google.maps.Animation.DROP
+    animation: google.maps.Animation.DROP,
+    selected: ko.observable(false)
   });
-};
 
-//add start animation and stop animation
-VenueModel.prototype.addAnimation = function(marker) {
-  marker.setAnimation(google.maps.Animation.BOUNCE);
-  setTimeout(function() {
-    marker.setAnimation(null);
-  }, 3000);
-};
+  self.marker.selected.subscribe(function(newValue) {
+    if (newValue) {
+      map.setCenter(self.marker.getPosition());
+      //set zoom level to 13 when the current zoom level is less than 13
+      if (map.getZoom() < 13) {
+        map.setZoom(13);
+      }
 
-//Do a series of events like animation and open infoWindow after clicking
-VenueModel.prototype.clickEvent = function(marker) {
-  this.addAnimation(marker);
-  this.openInfoWindow(marker);
+      self.marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        self.marker.selected(false);
+      }, 2000);
+
+      infowindow.setContent(self.marker.contentHtml);
+      infowindow.open(map, self.marker);
+    }
+
+    else {
+      self.marker.setAnimation(null);
+    }
+
+  });
 };
 
 //Add a marker to the map
@@ -46,16 +57,6 @@ VenueModel.prototype.removeMarker = function() {
   this.marker.setMap(null);
 };
 
-//Open infomation window for the venue model
-VenueModel.prototype.openInfoWindow = function(marker) {
-  map.setCenter(marker.getPosition());
-  //set zoom level to 13 when the current zoom level is less than 13
-  if(map.getZoom() < 13) {
-    map.setZoom(13);
-  }
-  infowindow.setContent(marker.contentHtml);
-  infowindow.open(map, marker);
-};
 
 //Extend bounds for the venue model
 VenueModel.prototype.extendBounds = function(bounds) {
@@ -142,14 +143,6 @@ function VenuesModel() {
 
   }, null, 'arrayChange');
 
-  //Stop all other markers animations
-  self.stopOtherAnimations = function(self_marker) {
-    ko.utils.arrayForEach(self.venuesModel(), function(venueModel) {
-      if (venueModel.marker != self_marker) {
-        venueModel.marker.setAnimation(null);
-      }
-    });
-  };
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
     //set limit 20 for number of venue models
@@ -188,8 +181,7 @@ function VenuesModel() {
         self.venuesModel.push(venueModel);
         //add click event listener for every marker
         google.maps.event.addListener(venueModel.marker, 'click', function() {
-          venueModel.clickEvent(this);
-          self.stopOtherAnimations(this);
+          this.selected(true);
         });
       }
 
