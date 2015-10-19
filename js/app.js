@@ -337,7 +337,7 @@ function initialize() {
       map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
       venuesModel.addvenuesModel();
     },
-    {timeout:5000}
+    {timeout: 10000}
   );
   
 }
