@@ -39,7 +39,6 @@ VenueModel = function(data) {
       infowindow.setContent(self.marker.contentHtml);
       infowindow.open(map, self.marker);
     }
-
     else {
       self.marker.setAnimation(null);
     }
@@ -48,12 +47,12 @@ VenueModel = function(data) {
 };
 
 //Add a marker to the map
-VenueModel.prototype.addMarker = function() {
+VenueModel.prototype.addMarkerToMap = function() {
   this.marker.setMap(map);
 };
 
 //Remove a marker from the map
-VenueModel.prototype.removeMarker = function() {
+VenueModel.prototype.removeMarkerFromMap = function() {
   this.marker.setMap(null);
 };
 
@@ -123,10 +122,10 @@ function VenuesModel() {
   self.filteredvenuesModel.subscribe(function(change) {
     for (var i=0, len=change.length; i < len; i++) {
       if (change[i].status === 'deleted') {
-        change[i].value.removeMarker();
+        change[i].value.removeMarkerFromMap();
       }
       else if (change[i].status === 'added') {
-        change[i].value.addMarker();
+        change[i].value.addMarkerToMap();
       }
     }
     //return if no places in the list view
@@ -172,7 +171,7 @@ function VenuesModel() {
       for(var i=0, length = venues.length; i < length; i++) {
         self.checkUnique(venues[i]);
         var venueModel = new VenueModel(venues[i]);
-        venueModel.addMarker();
+        venueModel.addMarkerToMap();
         //get information window content for every venue model
         ko.applyBindings(venueModel, $("#infoWindow")[0]);
         venueModel.marker.contentHtml = $("#infoWindow").html();
