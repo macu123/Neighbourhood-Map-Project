@@ -59,6 +59,16 @@ VenueModel = function(data) {
   self.extendBounds = function(bounds) {
     bounds.extend(this.marker.getPosition());
   };
+
+  self.addCategory = function(categories) {
+    if(categories.hasOwnProperty(self.category) === false) {
+      categories[self.category] = 1;
+    }
+    else {
+      categories[self.category] += 1;
+    }
+
+  };
 };
 
 //Model for all the venues, which is a array of venue models
@@ -76,8 +86,6 @@ function VenuesModel() {
   self.num_of_venueModel = ko.pureComputed(function() {
     return self.filteredvenuesModel().length;
   });
-  //object to store categories and their numbers
-  self.categories = {};
   //Observable to store filter keyword
   self.keyword = ko.observable("");
   //ObservableArray to store all VenueModel
@@ -133,11 +141,15 @@ function VenuesModel() {
     }
 
     //adjust the map bounds accordingly
+    //redraw category chart accordingly
     var bounds = new google.maps.LatLngBounds();
+    var categories = {};
     self.filteredvenuesModel().forEach(function(vm) {
       vm.extendBounds(bounds);
+      vm.addCategory(categories);
     });
     map.fitBounds(bounds);
+    self.createPieChart(categories);
 
   }, null, 'arrayChange');
 
@@ -168,24 +180,20 @@ function VenuesModel() {
       }
 
       for(var i=0, length = venues.length; i < length; i++) {
-        self.checkUnique(venues[i]);
         var venueModel = new VenueModel(venues[i]);
-        venueModel.addMarkerToMap();
         //get information window content for every venue model
         ko.applyBindings(venueModel, $("#infoWindow")[0]);
         venueModel.marker.contentHtml = $("#infoWindow").html();
         //remove the binding
         ko.cleanNode($("#infoWindow")[0]);
         self.venuesModel.push(venueModel);
+        self.filteredvenuesModel.push(venueModel);
         //add click event listener for every marker
         google.maps.event.addListener(venueModel.marker, 'click', function() {
           this.selected(true);
         });
       }
 
-      self.filteredvenuesModel(self.venuesModel());
-      self.createPieChart();
-      
     //not show the list if the ajax call fails
     }).error(function() {
       self.ajax_failed(true);
@@ -217,31 +225,18 @@ function VenuesModel() {
     return data.length >= 1;
   };
 
-  self.checkUnique = function(data) {
-    var category = data.venue.categories[0].name;
-    
-    if(self.categories.hasOwnProperty(category) === false) {
-      self.categories[category] = 1;
-    }
-    else {
-      self.categories[category] += 1;
-    }
-  };
-
-  self.createPieChart = function() {
-    var datatable = new google.visualization.DataTable();
+  self.createPieChart = function(categories) {
+    var dataTable = new google.visualization.DataTable();
     //Declare columns
-    datatable.addColumn('string', 'Category');
-    datatable.addColumn('number', 'Total number');
+    dataTable.addColumn('string', 'Category');
+    dataTable.addColumn('number', 'Total number');
     
-    $.each(self.categories, function(propertyName, valueOfProperty) {
+    $.each(categories, function(propertyName, valueOfProperty) {
       var row = [propertyName, valueOfProperty];
-      datatable.addRow(row);
+      dataTable.addRow(row);
     });
 
-    self.categories = {};
-
-    chart.draw(datatable, chartOption);
+    chart.draw(dataTable, chartOption);
   };
 
 }
@@ -338,7 +333,7 @@ function initialize() {
       map.setCenter(new google.maps.LatLng(43.2633, -79.9189));
       venuesModel.addvenuesModel();
     },
-    {timeout:10000}
+    {timeout:5000}
   );
   
 }
