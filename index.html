@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Neighborhood Map Project</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -23,6 +24,14 @@
   </div>
 
   <div class="full-screen">
+    <div class="ui segment loadingScreen" data-bind="visible: loadingScreen">
+      <div class="ui active dimmer">
+        <div class="ui large text loader">Please wait. Loading...</div>
+      </div>
+      <p></p>
+      <p></p>
+      <p></p>
+    </div>
     <button class="setting btn btn-primary btn-lg" data-toggle="popover" aria-label="Setting">
       <span class="glyphicon glyphicon-cog" aria-hidden="true">
 				</span>
@@ -108,6 +117,7 @@
   <div id="map-canvas"></div>
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="bower_components/knockout/dist/knockout.js"></script>
   <script src="https://www.google.com/jsapi"></script>

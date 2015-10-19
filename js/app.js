@@ -74,6 +74,8 @@ VenueModel = function(data) {
 //Model for all the venues, which is a array of venue models
 function VenuesModel() {
   var self = this;
+  //Observable indicating if the screen is loading screen
+  self.loadingScreen = ko.observable(true);
   //Observable indicating if it's filter or search in terms of functionality
   self.boxFunction = ko.observable();
   //Observable indicating if search button is disable or not
@@ -155,6 +157,7 @@ function VenuesModel() {
 
   //request popular venue models from FOURSQAURE
   self.addvenuesModel = function() {
+    self.loadingScreen(true);
     //set limit 20 for number of venue models
     var four_square_baseUrl = "https://api.foursquare.com/v2/venues/explore?" +
     "client_id=2XMLIEZFYZSTKFVOSAL5JQFQLQNDNMYGXWGGPWXUSDXQCK4L&" + 
@@ -202,6 +205,7 @@ function VenuesModel() {
         );
     });
 
+    self.loadingScreen(false);
   };
 
   //Remove all venue models from the array and remove their markers from the map

@@ -104,6 +104,14 @@ body {
   height: 25vh;
 }
 
+.ui.segment.loadingScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 @media (max-width: 650px) {
   h2 {
     font-size: 15px;
