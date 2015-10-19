@@ -44,22 +44,21 @@ VenueModel = function(data) {
     }
 
   });
-};
 
-//Add a marker to the map
-VenueModel.prototype.addMarkerToMap = function() {
-  this.marker.setMap(map);
-};
+  //Add a marker to the map
+  self.addMarkerToMap = function() {
+    self.marker.setMap(map);
+  };
 
-//Remove a marker from the map
-VenueModel.prototype.removeMarkerFromMap = function() {
-  this.marker.setMap(null);
-};
+  //Remove a marker from the map
+  self.removeMarkerFromMap = function() {
+    self.marker.setMap(null);
+  };
 
-
-//Extend bounds for the venue model
-VenueModel.prototype.extendBounds = function(bounds) {
-  bounds.extend(this.marker.getPosition());
+  //Extend bounds for the venue model
+  self.extendBounds = function(bounds) {
+    bounds.extend(this.marker.getPosition());
+  };
 };
 
 //Model for all the venues, which is a array of venue models
