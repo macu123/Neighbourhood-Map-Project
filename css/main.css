@@ -91,7 +91,7 @@ body {
 
 .searchBox > .functionSelector {
   width: 5vw;
-  min-width: 90px;
+  min-width: 110px;
 }
 
 .searchBox > .searchField {
